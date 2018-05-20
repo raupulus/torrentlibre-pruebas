@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS roles CASCADE;
 CREATE TABLE roles (
     id               BIGSERIAL     PRIMARY KEY
   , tipo             VARCHAR(255)  NOT NULL UNIQUE
+  , descripcion      VARCHAR(255)
 );
 
 CREATE INDEX idx_roles_tipo ON roles (tipo);
@@ -50,10 +51,11 @@ DROP TABLE IF EXISTS usuarios_datos CASCADE;
  * Datos sensibles de usuarios
  */
 CREATE TABLE usuarios_datos (
-    id               BIGINT        PRIMARY KEY REFERENCES usuarios (id)
+    usuario_id               BIGINT        PRIMARY KEY REFERENCES usuarios (id)
                                    ON DELETE CASCADE
   , nombre           VARCHAR(255)
   , nick             VARCHAR(255)  NOT NULL UNIQUE
+  , web              VARCHAR(255)
   , localidad        VARCHAR(255)
   , provincia        VARCHAR(255)
   , direccion        VARCHAR(255)
@@ -115,6 +117,7 @@ DROP TABLE IF EXISTS comentarios CASCADE;
  *
  * Todos los comentarios se asocian a un usuario y un torrent.
  * Un comentario puede ser hijo de otro (ser una respuesta a otro comentario)
+ * en ese caso tendrá "comentario_id" que es precisamente el padre de este.
  */
 CREATE TABLE comentarios (
     id              BIGSERIAL  PRIMARY KEY
@@ -154,3 +157,27 @@ CREATE TABLE usuarios_bloqueados (
 
 CREATE INDEX idx_usuarios_bloqueados_usuario_id
   ON usuarios_bloqueados (usuario_id);
+
+
+---------------------------------------------------
+--                     VISTAS                    --
+---------------------------------------------------
+
+/**
+ * Vista que engloba todos los datos de usuarios.
+ */
+CREATE OR REPLACE VIEW usuarios_view AS
+  SELECT
+    u.id, u.password, u.email, u.auth_key, u.token, u.created_at, u.updated_at,
+    u.updated_at,
+
+    ud.nombre, ud.nick, ud.web, ud.localidad, ud.provincia, ud.direccion,
+    ud.telefono, ud.biografia, ud.fecha_nacimiento, ud.geoloc, ud.genero,
+
+    r.tipo
+
+  FROM "usuarios" u
+    LEFT JOIN usuarios_datos ud ON u.id = ud.usuario_id
+    LEFT JOIN roles r on u.rol_id = r.id
+  GROUP BY u.id, ud.usuario_id
+;
