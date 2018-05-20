@@ -1,11 +1,10 @@
 
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/fryntiz/torrentlibre.svg?columns=all)](https://waffle.io/fryntiz/torrentlibre)
 
-#Torrent Libre
+# Torrent Libre
 
 
-[![Latest Stable Version](https://img.shields.io/badge/fryntiz%2Fyii2--app--basic-stable-red.svg)](https://packagist
-.org/packages/fryntiz/yii2-app-basic)
+[![Latest Stable Version](https://img.shields.io/badge/fryntiz%2Fyii2--app--basic-stable-red.svg)](https://packagist.org/packages/fryntiz/yii2-app-basic)
 
 
 DIRECTORY STRUCTURE
@@ -22,7 +21,6 @@ DIRECTORY STRUCTURE
       vendor/             contains dependent 3rd-party packages
       views/              contains view files for the Web application
       web/                contains the entry script and Web resources
-
 
 
 REQUIREMENTS
