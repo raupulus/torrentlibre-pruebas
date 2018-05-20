@@ -181,3 +181,24 @@ CREATE OR REPLACE VIEW usuarios_view AS
     LEFT JOIN roles r on u.rol_id = r.id
   GROUP BY u.id, ud.usuario_id
 ;
+
+/*
+ * Vista que agrupa los torrents con licencias y comentarios.
+ * Campos calculados:
+ * n_comentarios → Cantidad de comentarios padres por torrent.
+ */
+CREATE OR REPLACE VIEW torrents_view AS
+  SELECT
+    t.id, t.titulo, t.resumen, t.descripcion, t.imagen, t.file,
+    t.magnet,
+
+    l.tipo, l.url, l.imagen,
+
+    c.contenido, c.created_at, c.updated_at, c.deleted,
+    count(c.torrent_id) as n_comentarios
+  FROM "torrents" t
+    LEFT JOIN licencias l ON t.licencia_id = l.id
+    LEFT JOIN comentarios c on t.id = c.torrent_id
+  GROUP BY t.id, l.id, c.id
+;
+-- En comentarios me falta "comentario_id" que hace referencia al padre
