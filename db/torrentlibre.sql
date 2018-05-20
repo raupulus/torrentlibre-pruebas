@@ -1,11 +1,16 @@
-------------------------------
--- Archivo de base de datos --
-------------------------------
+---------------------------------------------------
+--           Archivo de base de datos            --
+---------------------------------------------------
 
 ---------------------------------------------------
 --                     Roles                     --
 ---------------------------------------------------
 DROP TABLE IF EXISTS roles CASCADE;
+
+/*
+ * Roles a los que pertenecen los usuarios
+ * Existen: admin, editor, user
+ */
 CREATE TABLE roles (
     id               BIGSERIAL     PRIMARY KEY
   , tipo             VARCHAR(255)  NOT NULL UNIQUE
@@ -17,6 +22,10 @@ CREATE INDEX idx_roles_tipo ON roles (tipo);
 --                    Usuarios                   --
 ---------------------------------------------------
 DROP TABLE IF EXISTS usuarios CASCADE;
+
+/*
+ * Usuarios y datos menos sensible
+ */
 CREATE TABLE usuarios (
     id               BIGSERIAL     PRIMARY KEY
   , password         VARCHAR(255)  NOT NULL
@@ -36,6 +45,10 @@ CREATE INDEX idx_usuarios_email ON usuarios (email);
 
 
 DROP TABLE IF EXISTS usuarios_datos CASCADE;
+
+/*
+ * Datos sensibles de usuarios
+ */
 CREATE TABLE usuarios_datos (
     id               BIGINT        PRIMARY KEY REFERENCES usuarios (id)
                                    ON DELETE CASCADE
@@ -58,10 +71,17 @@ CREATE INDEX idx_usuarios_datos_nick ON usuarios_datos (nick);
 --                  Licencias                    --
 ---------------------------------------------------
 DROP TABLE IF EXISTS licencias CASCADE;
+
+/*
+ * Licencias para asignar a los torrents.
+ * Las licencias (tipo) tienen un enlace hacia la web oficial (url) y
+ * el nombre de la imagen para esta.
+ */
 CREATE TABLE licencias (
     id               BIGSERIAL     PRIMARY KEY
   , tipo             VARCHAR(255)  NOT NULL UNIQUE
-  , URL              VARCHAR(255)  NOT NULL UNIQUE
+  , url              VARCHAR(255)  NOT NULL UNIQUE
+  , imagen           VARCHAR(255)
 );
 
 CREATE INDEX idx_licencias_tipo ON licencias (tipo);
@@ -70,6 +90,10 @@ CREATE INDEX idx_licencias_tipo ON licencias (tipo);
 --                   TORRENTS                    --
 ---------------------------------------------------
 DROP TABLE IF EXISTS torrents CASCADE;
+
+/*
+ * Información sobre los torrents
+ */
 CREATE TABLE torrents (
     id              BIGSERIAL     PRIMARY KEY
   , licencia_id     BIGINT        NOT NULL REFERENCES licencias (id)
@@ -128,3 +152,5 @@ CREATE TABLE usuarios_bloqueados (
   , created_at    TIMESTAMP(0) DEFAULT  LOCALTIMESTAMP
 );
 
+CREATE INDEX idx_usuarios_bloqueados_usuario_id
+  ON usuarios_bloqueados (usuario_id);
