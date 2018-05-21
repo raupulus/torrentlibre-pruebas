@@ -350,7 +350,9 @@ CREATE OR REPLACE VIEW usuarios_view AS
  * Vista que agrupa los torrents con licencias y comentarios.
  * Campos calculados:
  * n_comentarios → Cantidad de comentarios padres por torrent.
- * n_torrents → Cantidad de torrents subidos por el mismo usuario
+ * n_torrents → Cantidad de torrents subidos por el mismo usuario.
+ * n_puntos → Cantidad de puntos recibidos por votaciones a un torrent concreto.
+ * n_reportes → Cantidad de reportes que ha recibido un torrent.
  */
 CREATE OR REPLACE VIEW torrents_view AS
   SELECT
@@ -363,13 +365,19 @@ CREATE OR REPLACE VIEW torrents_view AS
 
     ca.nombre,
 
-    u.nick, u.avatar, count(u.nick) as n_torrents
+    u.nick, u.avatar, count(u.nick) as n_torrents,
+
+    count(p.torrent_id) as n_puntos,
+
+    count(rt.torrent_id) as n_reportes
   FROM "torrents" t
     LEFT JOIN licencias l ON t.licencia_id = l.id
     LEFT JOIN comentarios co on t.id = co.torrent_id
     LEFT JOIN categorias ca on t.categoria_id = ca.id
     LEFT JOIN usuarios u on co.usuario_id = u.id
-  GROUP BY t.id, l.id, co.id, ca.id, u.id
+    LEFT JOIN puntos p on t.id = p.torrent_id
+    LEFT JOIN reportes_torrents rt on t.id = rt.torrent_id
+  GROUP BY t.id, l.id, co.id, ca.id, u.id, p.torrent_id
 ;
 
 /*
@@ -377,6 +385,16 @@ CREATE OR REPLACE VIEW torrents_view AS
  */
 CREATE OR REPLACE VIEW comentarios_view AS
   SELECT
-    c.contenido
+    c.contenido,
+
+    u.avatar, u.nick,
+
+    t.resumen, t.imagen, t.titulo
   FROM "comentarios" c
+  LEFT JOIN usuarios u on c.usuario_id = u.id
+  LEFT JOIN torrents t on c.torrent_id = t.id
+  GROUP BY c.id, u.id, t.titulo, t.id
 ;
+
+
+
