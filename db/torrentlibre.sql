@@ -178,14 +178,14 @@ CREATE INDEX idx_torrents_resumen ON torrents (resumen);
 -- Falta indexar por categoria+titulo
 
 ---------------------------------------------------
---                  REPORTES                     --
+--              REPORTES TORRENTS                --
 ---------------------------------------------------
-DROP TABLE IF EXISTS reportes CASCADE;
+DROP TABLE IF EXISTS reportes_torrents CASCADE;
 
 /*
  * Listado de reportes realizados a torrents (Mal uso o caido)
  */
-CREATE TABLE reportes (
+CREATE TABLE reportes_torrents (
     id              BIGSERIAL     PRIMARY KEY
   , usuario_id      BIGINT        NOT NULL
                                   REFERENCES usuarios (id)
@@ -196,6 +196,7 @@ CREATE TABLE reportes (
                                   ON DELETE NO ACTION
                                   ON UPDATE CASCADE
   , ip              VARCHAR(15)
+  , comunicado       BOOLEAN       DEFAULT FALSE -- Indica si se avisó por email
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , UNIQUE (usuario_id, torrent_id)
 );
@@ -254,6 +255,30 @@ CREATE INDEX idx_comentarios_usuario_id ON comentarios (usuario_id);
 CREATE INDEX idx_comentarios_torrent_id ON comentarios (torrent_id);
 CREATE INDEX idx_comentarios_comentario_id ON comentarios (comentario_id);
 
+
+---------------------------------------------------
+--             REPORTES COMENTARIOS              --
+---------------------------------------------------
+DROP TABLE IF EXISTS reportes_comentarios CASCADE;
+
+/*
+ * Listado de reportes realizados a torrents (Mal uso o caido)
+ */
+CREATE TABLE reportes_comentarios (
+    id              BIGSERIAL     PRIMARY KEY
+  , usuario_id      BIGINT        NOT NULL
+                                  REFERENCES usuarios (id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , comentario_id   BIGINT        NOT NULL
+                                  REFERENCES comentarios (id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , ip              VARCHAR(15)
+  , comunicado      BOOLEAN       DEFAULT FALSE -- Indica si se avisó por email
+  , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
+  , UNIQUE (usuario_id, comentario_id)
+);
 
 ---------------------------------------------------
 --                    BANEADOS                   --
