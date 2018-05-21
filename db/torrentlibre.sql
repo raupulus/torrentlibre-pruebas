@@ -217,15 +217,18 @@ CREATE OR REPLACE VIEW usuarios_view AS
     ud.telefono, ud.biografia, ud.fecha_nacimiento, ud.geoloc, ud.sexo,
     ud.twitter,
 
-    r.tipo
+    r.tipo,
 
+    p.promociones, p.noticias, p.resumen, p.tour,
+
+    t.nombre AS tema
   FROM "usuarios" u
     LEFT JOIN usuarios_datos ud ON u.id = ud.id
     LEFT JOIN roles r on u.rol_id = r.id
-  GROUP BY u.id, ud.id, r.tipo
+    LEFT JOIN preferencias p on ud.preferencias_id = p.id
+    LEFT JOIN temas t on p.tema_id = t.id
+  GROUP BY u.id, ud.id, r.tipo, p.id, t.id
 ;
--- Falta añadir preferencias y temas
-
 
 /*
  * Vista que agrupa los torrents con licencias y comentarios.
@@ -239,11 +242,18 @@ CREATE OR REPLACE VIEW torrents_view AS
 
     l.tipo, l.url, l.imagen as imagen_licencia,
 
-    c.contenido, c.created_at, c.updated_at, c.deleted,
     count(c.torrent_id) as n_comentarios
   FROM "torrents" t
     LEFT JOIN licencias l ON t.licencia_id = l.id
     LEFT JOIN comentarios c on t.id = c.torrent_id
   GROUP BY t.id, l.id, c.id
 ;
--- En comentarios me falta "comentario_id" que hace referencia al padre
+
+/*
+ * Vista que agrupa todos los comentarios para un torrent
+ */
+CREATE OR REPLACE VIEW comentarios_view AS
+  SELECT
+    c.contenido
+  FROM "comentarios" c
+;
