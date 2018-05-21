@@ -196,7 +196,9 @@ CREATE TABLE reportes_torrents (
                                   ON DELETE NO ACTION
                                   ON UPDATE CASCADE
   , ip              VARCHAR(15)
-  , comunicado       BOOLEAN       DEFAULT FALSE -- Indica si se avisó por email
+  , titulo          VARCHAR(120)  NOT NULL
+  , resumen         VARCHAR(300)  NOT NULL
+  , comunicado      BOOLEAN       DEFAULT FALSE -- Indica si se avisó por email
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , UNIQUE (usuario_id, torrent_id)
 );
@@ -275,6 +277,8 @@ CREATE TABLE reportes_comentarios (
                                   ON DELETE NO ACTION
                                   ON UPDATE CASCADE
   , ip              VARCHAR(15)
+  , titulo          VARCHAR(120)  NOT NULL
+  , resumen         VARCHAR(300)  NOT NULL
   , comunicado      BOOLEAN       DEFAULT FALSE -- Indica si se avisó por email
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , UNIQUE (usuario_id, comentario_id)
