@@ -22,6 +22,30 @@ CREATE INDEX idx_roles_tipo ON roles (tipo);
 ---------------------------------------------------
 --                    Usuarios                   --
 ---------------------------------------------------
+DROP TABLE IF EXISTS usuarios_datos CASCADE;
+
+/*
+ * Datos sensibles de usuarios
+ */
+CREATE TABLE usuarios_datos (
+    usuario_id       BIGINT        PRIMARY KEY --REFERENCES usuarios (id)
+                                   --ON DELETE CASCADE
+  , nombre           VARCHAR(255)
+  , nick             VARCHAR(255)  NOT NULL UNIQUE
+  , web              VARCHAR(255)
+  , localidad        VARCHAR(255)
+  , provincia        VARCHAR(255)
+  , direccion        VARCHAR(255)
+  , telefono         VARCHAR(255)
+  , biografia        VARCHAR(255)
+  , fecha_nacimiento DATE
+  , geoloc           VARCHAR(255)
+  , sexo           CHAR          CHECK (sexo = 'F' OR sexo = 'M')
+);
+
+CREATE INDEX idx_usuarios_datos_nick ON usuarios_datos (nick);
+
+
 DROP TABLE IF EXISTS usuarios CASCADE;
 
 /*
@@ -35,7 +59,7 @@ CREATE TABLE usuarios (
   , token            VARCHAR(255)  UNIQUE
   , created_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , updated_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
-  , datos_id         BIGINT        REFERENCES usuarios_datos(id)
+  , datos_id         BIGINT        REFERENCES usuarios_datos(usuario_id)
   , rol_id           BIGINT        DEFAULT 1
                                    NOT NULL REFERENCES roles (id)
                                    ON DELETE NO ACTION
@@ -43,30 +67,6 @@ CREATE TABLE usuarios (
 );
 
 CREATE INDEX idx_usuarios_email ON usuarios (email);
-
-
-DROP TABLE IF EXISTS usuarios_datos CASCADE;
-
-/*
- * Datos sensibles de usuarios
- */
-CREATE TABLE usuarios_datos (
-    usuario_id               BIGINT        PRIMARY KEY REFERENCES usuarios (id)
-                                   ON DELETE CASCADE
-  , nombre           VARCHAR(255)
-  , nick             VARCHAR(255)  NOT NULL UNIQUE
-  , web              VARCHAR(255)
-  , localidad        VARCHAR(255)
-  , provincia        VARCHAR(255)
-  , direccion        VARCHAR(255)
-  , telefono         VARCHAR(255)
-  , biografia        VARCHAR(255)
-  , fecha_nacimiento DATE
-  , geoloc           VARCHAR(255)
-  , genero           CHAR       -- RESTRINGIR A M(Másculino) F(Femenino)
-);
-
-CREATE INDEX idx_usuarios_datos_nick ON usuarios_datos (nick);
 
 
 ---------------------------------------------------
@@ -101,7 +101,7 @@ CREATE TABLE torrents (
   , licencia_id     BIGINT        NOT NULL REFERENCES licencias (id)
   , titulo          VARCHAR(255)  NOT NULL
   , resumen         VARCHAR(255)  NOT NULL
-  , descripcion     TEXT(500)
+  , descripcion     VARCHAR(500)
   , imagen          VARCHAR(255)
   , file            VARCHAR(255)  -- Archivo .torrent
   , magnet          VARCHAR(255)  -- enlace magnet al torrent
@@ -127,7 +127,7 @@ CREATE TABLE comentarios (
   , torrent_id      BIGINT     NOT NULL REFERENCES torrents (id)
                                ON DELETE CASCADE
                                ON UPDATE CASCADE
-  , contenido       TEXT(500)  NOT NULL
+  , contenido       VARCHAR(500)  NOT NULL
   , comentario_id   BIGINT     REFERENCES comentarios (id)
                                ON DELETE NO ACTION
                                ON UPDATE CASCADE
@@ -169,17 +169,16 @@ CREATE INDEX idx_usuarios_bloqueados_usuario_id
 CREATE OR REPLACE VIEW usuarios_view AS
   SELECT
     u.id, u.password, u.email, u.auth_key, u.token, u.created_at, u.updated_at,
-    u.updated_at,
 
     ud.nombre, ud.nick, ud.web, ud.localidad, ud.provincia, ud.direccion,
-    ud.telefono, ud.biografia, ud.fecha_nacimiento, ud.geoloc, ud.genero,
+    ud.telefono, ud.biografia, ud.fecha_nacimiento, ud.geoloc, ud.sexo,
 
     r.tipo
 
   FROM "usuarios" u
     LEFT JOIN usuarios_datos ud ON u.id = ud.usuario_id
     LEFT JOIN roles r on u.rol_id = r.id
-  GROUP BY u.id, ud.usuario_id
+  GROUP BY u.id, ud.usuario_id, r.tipo
 ;
 
 /*
@@ -192,7 +191,7 @@ CREATE OR REPLACE VIEW torrents_view AS
     t.id, t.titulo, t.resumen, t.descripcion, t.imagen, t.file,
     t.magnet,
 
-    l.tipo, l.url, l.imagen,
+    l.tipo, l.url, l.imagen as imagen_licencia,
 
     c.contenido, c.created_at, c.updated_at, c.deleted,
     count(c.torrent_id) as n_comentarios
