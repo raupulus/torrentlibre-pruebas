@@ -76,7 +76,8 @@ CREATE TABLE usuarios_datos (
   , biografia        VARCHAR(255)
   , fecha_nacimiento DATE
   , geoloc           VARCHAR(255)
-  , sexo             CHAR          CHECK (sexo = 'F' OR sexo = 'M')
+  , sexo             CHAR          CONSTRAINT ck_sexo_f_o_m
+                                   CHECK (sexo = 'F'OR sexo = 'M')
   , twitter          VARCHAR(255)
   , preferencias_id  BIGINT        REFERENCES preferencias (id)
 );
@@ -143,6 +144,7 @@ CREATE TABLE categorias (
 
 CREATE INDEX idx_categorias_nombre ON categorias (nombre);
 
+
 ---------------------------------------------------
 --                   TORRENTS                    --
 ---------------------------------------------------
@@ -165,7 +167,7 @@ CREATE TABLE torrents (
   , password        VARCHAR(255)  -- Contraseña para descomprimir el torrent
   , md5             VARCHAR(255)  -- Verificación del .torrent
   , n_descargas     BIGINT        -- Cantidad de veces descargado
-  , n_puntos        BIGINT        -- Cantidad de puntos/votos
+  , online          BOOLEAN       DEFAULT TRUE -- Indica si es válido
   --, modificar       BOOLEAN  -- Indica si han solicitado modificación
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , updated_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
@@ -174,6 +176,50 @@ CREATE TABLE torrents (
 CREATE INDEX idx_torrents_titulo ON torrents (titulo);
 CREATE INDEX idx_torrents_resumen ON torrents (resumen);
 -- Falta indexar por categoria+titulo
+
+---------------------------------------------------
+--                  REPORTES                     --
+---------------------------------------------------
+DROP TABLE IF EXISTS reportes CASCADE;
+
+/*
+ * Listado de reportes realizados a torrents (Mal uso o caido)
+ */
+CREATE TABLE reportes (
+    id              BIGSERIAL     PRIMARY KEY
+  , usuario_id      BIGINT        NOT NULL
+                                  REFERENCES usuarios (id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , torrent_id      BIGINT        NOT NULL
+                                  REFERENCES torrents (id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , ip              VARCHAR(15)
+  , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
+  , UNIQUE (usuario_id, torrent_id)
+);
+
+
+---------------------------------------------------
+--                    PUNTOS                     --
+---------------------------------------------------
+DROP TABLE IF EXISTS puntos CASCADE;
+
+/*
+ * Puntos de los torrents que han dado los usuarios
+ */
+CREATE TABLE puntos (
+    id              BIGSERIAL     PRIMARY KEY
+  , usuario_id      BIGINT        NOT NULL REFERENCES usuarios (id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , torrent_id      BIGINT        NOT NULL REFERENCES torrents (id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
+  , UNIQUE (usuario_id, torrent_id)
+);
 
 ---------------------------------------------------
 --                 COMENTARIOS                   --
@@ -226,6 +272,17 @@ CREATE TABLE usuarios_bloqueados (
 CREATE INDEX idx_usuarios_bloqueados_usuario_id
   ON usuarios_bloqueados (usuario_id);
 
+---------------------------------------------------
+--                    DEMANDAS                   --
+---------------------------------------------------
+DROP TABLE IF EXISTS demandas CASCADE;
+
+CREATE TABLE demandas (
+    id            BIGSERIAL    PRIMARY KEY
+  , usuario_id    BIGINT       NOT NULL REFERENCES "usuarios" (id)
+  , titulo        VARCHAR(255) NOT NULL UNIQUE
+  , descripcion   VARCHAR(255) NOT NULL
+);
 
 ---------------------------------------------------
 --                     VISTAS                    --
@@ -269,7 +326,7 @@ CREATE OR REPLACE VIEW usuarios_view AS
 CREATE OR REPLACE VIEW torrents_view AS
   SELECT
     t.id, t.usuario_id, t.titulo, t.resumen, t.descripcion, t.imagen, t.file,
-    t.magnet, t.password, t.md5, t.n_descargas, t.n_puntos,
+    t.magnet, t.password, t.md5, t.n_descargas, t.online,
 
     l.tipo, l.url, l.imagen as imagen_licencia,
 
