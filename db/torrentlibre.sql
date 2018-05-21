@@ -129,6 +129,21 @@ CREATE TABLE licencias (
 CREATE INDEX idx_licencias_tipo ON licencias (tipo);
 
 ---------------------------------------------------
+--                  CATEGORÍAS                   --
+---------------------------------------------------
+DROP TABLE IF EXISTS categorias CASCADE;
+
+/*
+ * Categorías a la que puede pertenecer un torrent
+ */
+CREATE TABLE categorias (
+    id              BIGSERIAL     PRIMARY KEY
+  , nombre          VARCHAR(255)  NOT NULL UNIQUE
+);
+
+CREATE INDEX idx_categorias_nombre ON categorias (nombre);
+
+---------------------------------------------------
 --                   TORRENTS                    --
 ---------------------------------------------------
 DROP TABLE IF EXISTS torrents CASCADE;
@@ -139,6 +154,7 @@ DROP TABLE IF EXISTS torrents CASCADE;
 CREATE TABLE torrents (
     id              BIGSERIAL     PRIMARY KEY
   , licencia_id     BIGINT        NOT NULL REFERENCES licencias (id)
+  , categoria_id    BIGINT        NOT NULL REFERENCES categorias (id)
   , titulo          VARCHAR(255)  NOT NULL
   , resumen         VARCHAR(255)  NOT NULL
   , descripcion     VARCHAR(500)
@@ -148,6 +164,9 @@ CREATE TABLE torrents (
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , updated_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
 );
+
+CREATE INDEX idx_torrents_titulo ON torrents (titulo);
+CREATE INDEX idx_torrents_resumen ON torrents (resumen);
 
 ---------------------------------------------------
 --                 COMENTARIOS                   --
@@ -242,11 +261,14 @@ CREATE OR REPLACE VIEW torrents_view AS
 
     l.tipo, l.url, l.imagen as imagen_licencia,
 
-    count(c.torrent_id) as n_comentarios
+    count(co.torrent_id) as n_comentarios,
+
+    ca.nombre
   FROM "torrents" t
     LEFT JOIN licencias l ON t.licencia_id = l.id
-    LEFT JOIN comentarios c on t.id = c.torrent_id
-  GROUP BY t.id, l.id, c.id
+    LEFT JOIN comentarios co on t.id = co.torrent_id
+    LEFT JOIN categorias ca on t.categoria_id = ca.id
+  GROUP BY t.id, l.id, co.id, ca.nombre
 ;
 
 /*

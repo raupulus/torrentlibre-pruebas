@@ -125,12 +125,22 @@ INSERT INTO licencias (tipo, url, imagen) VALUES
 
 
 ---------------------------------------------------
+--                  CATEGORÍAS                   --
+---------------------------------------------------
+INSERT INTO categorias (nombre) VALUES
+    ('Máquina virtual')
+  , ('Libro')
+;
+
+---------------------------------------------------
 --                   TORRENTS                    --
 ---------------------------------------------------
-INSERT INTO torrents (licencia_id, titulo, resumen, descripcion, imagen, file, magnet)
+INSERT INTO torrents (licencia_id, categoria_id, titulo, resumen, descripcion,
+                      imagen, file, magnet)
 VALUES
   (
       1
+    , 1
     , 'Torrent de prueba 1'
     , 'Descripción corta del torrent de prueba'
     , 'Descripción larga donde se explica a fondo el torrent y su contenido'
@@ -140,7 +150,8 @@ VALUES
   )
 
   , (
-    1
+      1
+    , 2
     , 'Torrent de prueba 2'
     , 'Descripción corta del torrent de prueba'
     , 'Descripción larga donde se explica a fondo el torrent y su contenido'
@@ -150,7 +161,8 @@ VALUES
   )
 
   , (
-    1
+      1
+    , 1
     , 'Torrent de prueba 3'
     , 'Descripción corta del torrent de prueba'
     , 'Descripción larga donde se explica a fondo el torrent y su contenido'
