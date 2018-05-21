@@ -29,12 +29,11 @@ INSERT INTO preferencias (tema_id) VALUES
 --                    Usuarios                   --
 ---------------------------------------------------
 INSERT INTO usuarios_datos (
-  nombre, nick, web, localidad, provincia, direccion, telefono, biografia,
+  nombre, web, localidad, provincia, direccion, telefono, biografia,
   fecha_nacimiento, geoloc, sexo, twitter, preferencias_id
 ) VALUES
   (
       'Administrador'
-    , 'admin'
     , 'https://www.fryntiz.es'
     , 'Cádiz'
     , 'Chipiona'
@@ -50,7 +49,6 @@ INSERT INTO usuarios_datos (
 
   , (
       'Editor'
-    , 'editor'
     , 'https://www.fryntiz.es'
     , 'Cádiz'
     , 'Chipiona'
@@ -66,7 +64,6 @@ INSERT INTO usuarios_datos (
 
   , (
       'Pepe'
-    , 'pepeitor3000'
     , 'https://www.fryntiz.es'
     , 'Cádiz'
     , 'Chipiona'
@@ -81,11 +78,13 @@ INSERT INTO usuarios_datos (
   )
 ;
 
-INSERT INTO usuarios (password, email, auth_key, token, datos_id, rol_id, ip)
+INSERT INTO usuarios (password, email, nick, auth_key, token, datos_id, rol_id,
+                      ip)
 VALUES
   (
       crypt('admin', gen_salt('bf', 13))
     , 'admin@admin.com'
+    , 'admin'
     , ''
     , 'temp1'
     , 1
@@ -96,6 +95,7 @@ VALUES
   , (
     crypt('1234', gen_salt('bf', 13))
     , 'user1@domain.com'
+    , 'editor'
     , ''
     , 'temp2'
     , 2
@@ -106,6 +106,7 @@ VALUES
   , (
     crypt('1234', gen_salt('bf', 13))
     , 'user2@domain.com'
+    , 'pepeneitor3000'
     , ''
     , 'temp3'
     , 3
@@ -135,12 +136,14 @@ INSERT INTO categorias (nombre) VALUES
 ---------------------------------------------------
 --                   TORRENTS                    --
 ---------------------------------------------------
-INSERT INTO torrents (licencia_id, categoria_id, titulo, resumen, descripcion,
+INSERT INTO torrents (licencia_id, categoria_id, usuario_id, titulo, resumen,
+                      descripcion,
                       imagen, file, magnet)
 VALUES
   (
       1
     , 1
+    , 3
     , 'Torrent de prueba 1'
     , 'Descripción corta del torrent de prueba'
     , 'Descripción larga donde se explica a fondo el torrent y su contenido'
@@ -152,6 +155,7 @@ VALUES
   , (
       1
     , 2
+    , 3
     , 'Torrent de prueba 2'
     , 'Descripción corta del torrent de prueba'
     , 'Descripción larga donde se explica a fondo el torrent y su contenido'
@@ -163,6 +167,7 @@ VALUES
   , (
       1
     , 1
+    , 3
     , 'Torrent de prueba 3'
     , 'Descripción corta del torrent de prueba'
     , 'Descripción larga donde se explica a fondo el torrent y su contenido'

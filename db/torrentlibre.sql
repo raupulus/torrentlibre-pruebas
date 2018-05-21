@@ -68,7 +68,6 @@ CREATE TABLE usuarios_datos (
     id               BIGSERIAL     PRIMARY KEY --REFERENCES usuarios (id)
                                    --ON DELETE CASCADE
   , nombre           VARCHAR(255)
-  , nick             VARCHAR(255)  NOT NULL UNIQUE
   , web              VARCHAR(255)
   , localidad        VARCHAR(255)
   , provincia        VARCHAR(255)
@@ -82,8 +81,6 @@ CREATE TABLE usuarios_datos (
   , preferencias_id  BIGINT        REFERENCES preferencias (id)
 );
 
-CREATE INDEX idx_usuarios_datos_nick ON usuarios_datos (nick);
-
 
 DROP TABLE IF EXISTS usuarios CASCADE;
 
@@ -94,6 +91,8 @@ CREATE TABLE usuarios (
     id               BIGSERIAL     PRIMARY KEY
   , password         VARCHAR(255)  NOT NULL
   , email            VARCHAR(255)  NOT NULL UNIQUE
+  , nick             VARCHAR(255)  NOT NULL UNIQUE
+  , avatar           VARCHAR(255)
   , auth_key         VARCHAR(255)
   , token            VARCHAR(255)  UNIQUE
   , created_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
@@ -107,6 +106,7 @@ CREATE TABLE usuarios (
 );
 
 CREATE INDEX idx_usuarios_email ON usuarios (email);
+CREATE INDEX idx_usuarios_nick ON usuarios (nick);
 
 
 ---------------------------------------------------
@@ -155,18 +155,25 @@ CREATE TABLE torrents (
     id              BIGSERIAL     PRIMARY KEY
   , licencia_id     BIGINT        NOT NULL REFERENCES licencias (id)
   , categoria_id    BIGINT        NOT NULL REFERENCES categorias (id)
+  , usuario_id      BIGINT        NOT NULL REFERENCES usuarios (id)
   , titulo          VARCHAR(255)  NOT NULL
   , resumen         VARCHAR(255)  NOT NULL
   , descripcion     VARCHAR(500)
   , imagen          VARCHAR(255)
   , file            VARCHAR(255)  -- Archivo .torrent
   , magnet          VARCHAR(255)  -- enlace magnet al torrent
+  , password        VARCHAR(255)  -- Contraseña para descomprimir el torrent
+  , md5             VARCHAR(255)  -- Verificación del .torrent
+  , n_descargas     BIGINT        -- Cantidad de veces descargado
+  , n_puntos        BIGINT        -- Cantidad de puntos/votos
+  --, modificar       BOOLEAN  -- Indica si han solicitado modificación
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , updated_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
 );
 
 CREATE INDEX idx_torrents_titulo ON torrents (titulo);
 CREATE INDEX idx_torrents_resumen ON torrents (resumen);
+-- Falta indexar por categoria+titulo
 
 ---------------------------------------------------
 --                 COMENTARIOS                   --
@@ -226,13 +233,14 @@ CREATE INDEX idx_usuarios_bloqueados_usuario_id
 
 /**
  * Vista que engloba todos los datos de usuarios.
+ * n_torrents → Cantidad de torrents para el usuario
  */
 CREATE OR REPLACE VIEW usuarios_view AS
   SELECT
-    u.id, u.password, u.email, u.auth_key, u.token, u.created_at, u.updated_at,
-    u.ip,
+    u.id, u.password, u.email, u.nick, u.avatar, u.auth_key, u.token,
+    u.created_at, u.updated_at, u.ip,
 
-    ud.nombre, ud.nick, ud.web, ud.localidad, ud.provincia, ud.direccion,
+    ud.nombre, ud.web, ud.localidad, ud.provincia, ud.direccion,
     ud.telefono, ud.biografia, ud.fecha_nacimiento, ud.geoloc, ud.sexo,
     ud.twitter,
 
@@ -240,35 +248,42 @@ CREATE OR REPLACE VIEW usuarios_view AS
 
     p.promociones, p.noticias, p.resumen, p.tour,
 
-    t.nombre AS tema
+    t.nombre AS tema,
+
+    count(tor.usuario_id) n_torrents
   FROM "usuarios" u
     LEFT JOIN usuarios_datos ud ON u.id = ud.id
     LEFT JOIN roles r on u.rol_id = r.id
     LEFT JOIN preferencias p on ud.preferencias_id = p.id
     LEFT JOIN temas t on p.tema_id = t.id
-  GROUP BY u.id, ud.id, r.tipo, p.id, t.id
+    LEFT JOIN torrents tor on u.id = tor.usuario_id
+  GROUP BY u.id, ud.id, r.id, p.id, t.id, tor.usuario_id
 ;
 
 /*
  * Vista que agrupa los torrents con licencias y comentarios.
  * Campos calculados:
  * n_comentarios → Cantidad de comentarios padres por torrent.
+ * n_torrents → Cantidad de torrents subidos por el mismo usuario
  */
 CREATE OR REPLACE VIEW torrents_view AS
   SELECT
-    t.id, t.titulo, t.resumen, t.descripcion, t.imagen, t.file,
-    t.magnet,
+    t.id, t.usuario_id, t.titulo, t.resumen, t.descripcion, t.imagen, t.file,
+    t.magnet, t.password, t.md5, t.n_descargas, t.n_puntos,
 
     l.tipo, l.url, l.imagen as imagen_licencia,
 
     count(co.torrent_id) as n_comentarios,
 
-    ca.nombre
+    ca.nombre,
+
+    u.nick, u.avatar, count(u.nick) as n_torrents
   FROM "torrents" t
     LEFT JOIN licencias l ON t.licencia_id = l.id
     LEFT JOIN comentarios co on t.id = co.torrent_id
     LEFT JOIN categorias ca on t.categoria_id = ca.id
-  GROUP BY t.id, l.id, co.id, ca.nombre
+    LEFT JOIN usuarios u on co.usuario_id = u.id
+  GROUP BY t.id, l.id, co.id, ca.id, u.id
 ;
 
 /*
