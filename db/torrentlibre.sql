@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS roles CASCADE;
 
 /*
  * Roles a los que pertenecen los usuarios
- * Existen: admin, editor, user
+ * Existen: admin, editor, basic
  */
 CREATE TABLE roles (
     id               BIGSERIAL     PRIMARY KEY
@@ -20,6 +20,43 @@ CREATE TABLE roles (
 CREATE INDEX idx_roles_tipo ON roles (tipo);
 
 ---------------------------------------------------
+--                     TEMAS                     --
+---------------------------------------------------
+DROP TABLE IF EXISTS temas CASCADE;
+
+/*
+ * Contiene el nombre del tema (será una clase CSS) y la descripción a mostrar
+ */
+CREATE TABLE temas (
+    id               BIGSERIAL     PRIMARY KEY
+  , nombre           VARCHAR(255)  NOT NULL UNIQUE
+  , descripcion      VARCHAR(500)
+);
+
+---------------------------------------------------
+--                  PREFERENCIAS                 --
+---------------------------------------------------
+DROP TABLE IF EXISTS preferencias CASCADE;
+
+/*
+ * Contiene las preferencias del usuario
+ *
+ * Los booleanos "promociones, noticias y resumen" son para el envio de
+ * publicidad o contenido de forma automatizada.
+ *
+ * El booleano "tour" indica si mostrar una guía dinámica de como usar la
+ * aplicación, por defecto se activa para la primera vez que se entra.
+ */
+CREATE TABLE preferencias (
+    id               BIGSERIAL     PRIMARY KEY
+  , tema_id          BIGINT        NOT NULL REFERENCES temas (id) DEFAULT 1
+  , promociones      BOOLEAN       DEFAULT true
+  , noticias         BOOLEAN       DEFAULT true
+  , resumen          BOOLEAN       DEFAULT true
+  , tour             BOOLEAN       DEFAULT true
+);
+
+---------------------------------------------------
 --                    Usuarios                   --
 ---------------------------------------------------
 DROP TABLE IF EXISTS usuarios_datos CASCADE;
@@ -28,7 +65,7 @@ DROP TABLE IF EXISTS usuarios_datos CASCADE;
  * Datos sensibles de usuarios
  */
 CREATE TABLE usuarios_datos (
-    usuario_id       BIGINT        PRIMARY KEY --REFERENCES usuarios (id)
+    id               BIGSERIAL     PRIMARY KEY --REFERENCES usuarios (id)
                                    --ON DELETE CASCADE
   , nombre           VARCHAR(255)
   , nick             VARCHAR(255)  NOT NULL UNIQUE
@@ -40,7 +77,9 @@ CREATE TABLE usuarios_datos (
   , biografia        VARCHAR(255)
   , fecha_nacimiento DATE
   , geoloc           VARCHAR(255)
-  , sexo           CHAR          CHECK (sexo = 'F' OR sexo = 'M')
+  , sexo             CHAR          CHECK (sexo = 'F' OR sexo = 'M')
+  , twitter          VARCHAR(255)
+  , preferencias_id  BIGINT        REFERENCES preferencias (id)
 );
 
 CREATE INDEX idx_usuarios_datos_nick ON usuarios_datos (nick);
@@ -59,11 +98,12 @@ CREATE TABLE usuarios (
   , token            VARCHAR(255)  UNIQUE
   , created_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , updated_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
-  , datos_id         BIGINT        REFERENCES usuarios_datos(usuario_id)
+  , datos_id         BIGINT        REFERENCES usuarios_datos (id)
   , rol_id           BIGINT        DEFAULT 1
                                    NOT NULL REFERENCES roles (id)
                                    ON DELETE NO ACTION
                                    ON UPDATE CASCADE
+  , ip               VARCHAR(15)  -- Última IP de acceso
 );
 
 CREATE INDEX idx_usuarios_email ON usuarios (email);
@@ -105,6 +145,8 @@ CREATE TABLE torrents (
   , imagen          VARCHAR(255)
   , file            VARCHAR(255)  -- Archivo .torrent
   , magnet          VARCHAR(255)  -- enlace magnet al torrent
+  , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
+  , updated_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
 );
 
 ---------------------------------------------------
@@ -131,8 +173,8 @@ CREATE TABLE comentarios (
   , comentario_id   BIGINT     REFERENCES comentarios (id)
                                ON DELETE NO ACTION
                                ON UPDATE CASCADE
-  , created_at      TIMESTAMP(0)  NOT NULL DEFAULT LOCALTIMESTAMP
-  , updated_at      TIMESTAMP(0)
+  , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
+  , updated_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , deleted         BOOLEAN    DEFAULT FALSE
 );
 
@@ -169,17 +211,21 @@ CREATE INDEX idx_usuarios_bloqueados_usuario_id
 CREATE OR REPLACE VIEW usuarios_view AS
   SELECT
     u.id, u.password, u.email, u.auth_key, u.token, u.created_at, u.updated_at,
+    u.ip,
 
     ud.nombre, ud.nick, ud.web, ud.localidad, ud.provincia, ud.direccion,
     ud.telefono, ud.biografia, ud.fecha_nacimiento, ud.geoloc, ud.sexo,
+    ud.twitter,
 
     r.tipo
 
   FROM "usuarios" u
-    LEFT JOIN usuarios_datos ud ON u.id = ud.usuario_id
+    LEFT JOIN usuarios_datos ud ON u.id = ud.id
     LEFT JOIN roles r on u.rol_id = r.id
-  GROUP BY u.id, ud.usuario_id, r.tipo
+  GROUP BY u.id, ud.id, r.tipo
 ;
+-- Falta añadir preferencias y temas
+
 
 /*
  * Vista que agrupa los torrents con licencias y comentarios.
