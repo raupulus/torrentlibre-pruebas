@@ -17,8 +17,6 @@ CREATE TABLE roles (
   , descripcion      VARCHAR(255)
 );
 
-CREATE INDEX idx_roles_tipo ON roles (tipo);
-
 ---------------------------------------------------
 --                     TEMAS                     --
 ---------------------------------------------------
@@ -65,9 +63,14 @@ DROP TABLE IF EXISTS usuarios_datos CASCADE;
  * Datos sensibles de usuarios
  */
 CREATE TABLE usuarios_datos (
-    id               BIGSERIAL     PRIMARY KEY --REFERENCES usuarios (id)
-                                   --ON DELETE CASCADE
+    id               BIGINT        PRIMARY KEY REFERENCES usuarios (id)
+                                   ON DELETE CASCADE
   , nombre           VARCHAR(255)
+  , nick             VARCHAR(255)  NOT NULL UNIQUE
+  , email            VARCHAR(255)  NOT NULL UNIQUE
+  , password         VARCHAR(255)  NOT NULL
+  , auth_key         VARCHAR(255)
+  , token            VARCHAR(255)  UNIQUE
   , web              VARCHAR(255)
   , localidad        VARCHAR(255)
   , provincia        VARCHAR(255)
@@ -76,10 +79,11 @@ CREATE TABLE usuarios_datos (
   , biografia        VARCHAR(255)
   , fecha_nacimiento DATE
   , geoloc           VARCHAR(255)
-  , sexo             CHAR          CONSTRAINT ck_sexo_f_o_m
-                                   CHECK (sexo = 'F'OR sexo = 'M')
+  , sexo             CHAR          --CONSTRAINT ck_sexo_f_o_m
+                                   --CHECK (sexo = 'F'OR sexo = 'M')
   , twitter          VARCHAR(255)
   , preferencias_id  BIGINT        REFERENCES preferencias (id)
+  , avatar           VARCHAR(255)
 );
 
 
@@ -90,12 +94,7 @@ DROP TABLE IF EXISTS usuarios CASCADE;
  */
 CREATE TABLE usuarios (
     id               BIGSERIAL     PRIMARY KEY
-  , password         VARCHAR(255)  NOT NULL
-  , email            VARCHAR(255)  NOT NULL UNIQUE
-  , nick             VARCHAR(255)  NOT NULL UNIQUE
-  , avatar           VARCHAR(255)
-  , auth_key         VARCHAR(255)
-  , token            VARCHAR(255)  UNIQUE
+
   , created_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , updated_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , datos_id         BIGINT        REFERENCES usuarios_datos (id)
@@ -105,9 +104,6 @@ CREATE TABLE usuarios (
                                    ON UPDATE CASCADE
   , ip               VARCHAR(15)  -- Última IP de acceso
 );
-
-CREATE INDEX idx_usuarios_email ON usuarios (email);
-CREATE INDEX idx_usuarios_nick ON usuarios (nick);
 
 
 ---------------------------------------------------
@@ -127,8 +123,6 @@ CREATE TABLE licencias (
   , imagen           VARCHAR(255)
 );
 
-CREATE INDEX idx_licencias_tipo ON licencias (tipo);
-
 ---------------------------------------------------
 --                  CATEGORÍAS                   --
 ---------------------------------------------------
@@ -141,8 +135,6 @@ CREATE TABLE categorias (
     id              BIGSERIAL     PRIMARY KEY
   , nombre          VARCHAR(255)  NOT NULL UNIQUE
 );
-
-CREATE INDEX idx_categorias_nombre ON categorias (nombre);
 
 
 ---------------------------------------------------
@@ -173,8 +165,10 @@ CREATE TABLE torrents (
   , updated_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
 );
 
-CREATE INDEX idx_torrents_titulo ON torrents (titulo);
-CREATE INDEX idx_torrents_resumen ON torrents (resumen);
+-- Este indexado no vale para buscar por ilike
+--CREATE INDEX idx_torrents_titulo ON torrents (titulo);
+--CREATE INDEX idx_torrents_resumen ON torrents (resumen);
+CREATE INDEX idx_torrents_categoria_id ON torrents (categoria_id);
 -- Falta indexar por categoria+titulo
 
 ---------------------------------------------------
@@ -203,6 +197,8 @@ CREATE TABLE reportes_torrents (
   , UNIQUE (usuario_id, torrent_id)
 );
 
+CREATE INDEX idx_reportes_torrents_torrent_id ON reportes_torrents (torrent_id);
+
 
 ---------------------------------------------------
 --                    PUNTOS                     --
@@ -223,6 +219,8 @@ CREATE TABLE puntos (
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   , UNIQUE (usuario_id, torrent_id)
 );
+
+CREATE INDEX idx_puntos_torrent_id ON puntos (torrent_id);
 
 ---------------------------------------------------
 --                 COMENTARIOS                   --
@@ -264,7 +262,7 @@ CREATE INDEX idx_comentarios_comentario_id ON comentarios (comentario_id);
 DROP TABLE IF EXISTS reportes_comentarios CASCADE;
 
 /*
- * Listado de reportes realizados a torrents (Mal uso o caido)
+ * Listado de reportes realizados a comentarios (Mal uso o inapropiados)
  */
 CREATE TABLE reportes_comentarios (
     id              BIGSERIAL     PRIMARY KEY
@@ -284,6 +282,10 @@ CREATE TABLE reportes_comentarios (
   , UNIQUE (usuario_id, comentario_id)
 );
 
+CREATE INDEX idx_reportes_comentarios_comentario_id
+  ON reportes_comentarios (comentario_id);
+
+
 ---------------------------------------------------
 --                    BANEADOS                   --
 ---------------------------------------------------
@@ -294,23 +296,25 @@ DROP TABLE IF EXISTS usuarios_bloqueados CASCADE;
  */
 CREATE TABLE usuarios_bloqueados (
     id            BIGSERIAL    PRIMARY KEY
-  , usuario_id    BIGINT       NOT NULL REFERENCES "usuarios" (id)
+  , usuario_id    BIGINT       NOT NULL UNIQUE REFERENCES "usuarios" (id)
   , created_at    TIMESTAMP(0) DEFAULT  LOCALTIMESTAMP
 );
 
-CREATE INDEX idx_usuarios_bloqueados_usuario_id
-  ON usuarios_bloqueados (usuario_id);
 
 ---------------------------------------------------
 --                    DEMANDAS                   --
 ---------------------------------------------------
 DROP TABLE IF EXISTS demandas CASCADE;
 
+/*
+ * Torrents que han solicitado la comunidad
+ */
 CREATE TABLE demandas (
     id            BIGSERIAL    PRIMARY KEY
   , usuario_id    BIGINT       NOT NULL REFERENCES "usuarios" (id)
   , titulo        VARCHAR(255) NOT NULL UNIQUE
   , descripcion   VARCHAR(255) NOT NULL
+  , atendido      BOOLEAN      NOT NULL DEFAULT FALSE
 );
 
 ---------------------------------------------------
@@ -321,6 +325,7 @@ CREATE TABLE demandas (
  * Vista que engloba todos los datos de usuarios.
  * n_torrents → Cantidad de torrents para el usuario
  */
+/*
 CREATE OR REPLACE VIEW usuarios_view AS
   SELECT
     u.id, u.password, u.email, u.nick, u.avatar, u.auth_key, u.token,
@@ -345,6 +350,8 @@ CREATE OR REPLACE VIEW usuarios_view AS
     LEFT JOIN torrents tor on u.id = tor.usuario_id
   GROUP BY u.id, ud.id, r.id, p.id, t.id, tor.usuario_id
 ;
+*/
+
 
 /*
  * Vista que agrupa los torrents con licencias y comentarios.
@@ -354,6 +361,8 @@ CREATE OR REPLACE VIEW usuarios_view AS
  * n_puntos → Cantidad de puntos recibidos por votaciones a un torrent concreto.
  * n_reportes → Cantidad de reportes que ha recibido un torrent.
  */
+
+/*
 CREATE OR REPLACE VIEW torrents_view AS
   SELECT
     t.id, t.usuario_id, t.titulo, t.resumen, t.descripcion, t.imagen, t.file,
@@ -379,10 +388,13 @@ CREATE OR REPLACE VIEW torrents_view AS
     LEFT JOIN reportes_torrents rt on t.id = rt.torrent_id
   GROUP BY t.id, l.id, co.id, ca.id, u.id, p.torrent_id
 ;
+*/
 
 /*
  * Vista que agrupa todos los comentarios para un torrent
  */
+
+/*
 CREATE OR REPLACE VIEW comentarios_view AS
   SELECT
     c.contenido,
@@ -395,6 +407,6 @@ CREATE OR REPLACE VIEW comentarios_view AS
   LEFT JOIN torrents t on c.torrent_id = t.id
   GROUP BY c.id, u.id, t.titulo, t.id
 ;
-
+*/
 
 
