@@ -57,6 +57,25 @@ CREATE TABLE preferencias (
 ---------------------------------------------------
 --                    Usuarios                   --
 ---------------------------------------------------
+DROP TABLE IF EXISTS usuarios CASCADE;
+
+/*
+ * Usuarios y datos menos sensible
+ */
+CREATE TABLE usuarios (
+    id               BIGSERIAL     PRIMARY KEY
+
+  , created_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
+  , updated_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
+  --, datos_id         BIGINT        REFERENCES usuarios_datos (id)
+  , rol_id           BIGINT        DEFAULT 1
+  NOT NULL REFERENCES roles (id)
+  ON DELETE NO ACTION
+  ON UPDATE CASCADE
+  , ip               VARCHAR(15)  -- Última IP de acceso
+);
+
+
 DROP TABLE IF EXISTS usuarios_datos CASCADE;
 
 /*
@@ -84,25 +103,6 @@ CREATE TABLE usuarios_datos (
   , twitter          VARCHAR(255)
   , preferencias_id  BIGINT        REFERENCES preferencias (id)
   , avatar           VARCHAR(255)
-);
-
-
-DROP TABLE IF EXISTS usuarios CASCADE;
-
-/*
- * Usuarios y datos menos sensible
- */
-CREATE TABLE usuarios (
-    id               BIGSERIAL     PRIMARY KEY
-
-  , created_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
-  , updated_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
-  , datos_id         BIGINT        REFERENCES usuarios_datos (id)
-  , rol_id           BIGINT        DEFAULT 1
-                                   NOT NULL REFERENCES roles (id)
-                                   ON DELETE NO ACTION
-                                   ON UPDATE CASCADE
-  , ip               VARCHAR(15)  -- Última IP de acceso
 );
 
 

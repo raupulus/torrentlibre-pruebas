@@ -28,12 +28,32 @@ INSERT INTO preferencias (tema_id) VALUES
 ---------------------------------------------------
 --                    Usuarios                   --
 ---------------------------------------------------
+INSERT INTO usuarios (rol_id,ip)
+VALUES
+  (
+      1
+    , '199.199.199.199'
+  )
+
+  , (
+      2
+    , '199.199.199.200'
+)
+
+  , (
+      3
+    , '199.199.199.201'
+)
+;
+
 INSERT INTO usuarios_datos (
-  nombre, web, localidad, provincia, direccion, telefono, biografia,
-  fecha_nacimiento, geoloc, sexo, twitter, preferencias_id
+  id, nombre, web, localidad, provincia, direccion, telefono, biografia,
+  fecha_nacimiento, geoloc, sexo, twitter, preferencias_id, password, email,
+  nick, auth_key, token
 ) VALUES
   (
-      'Administrador'
+      1
+    , 'Administrador'
     , 'https://www.fryntiz.es'
     , 'Cádiz'
     , 'Chipiona'
@@ -45,10 +65,16 @@ INSERT INTO usuarios_datos (
     , 'M'
     , '@admin'
     , 1
+    , crypt('admin', gen_salt('bf', 13))
+    , 'admin@admin.com'
+    , 'admin'
+    , ''
+    , 'temp1'
   )
 
   , (
-      'Editor'
+      2
+    , 'Editor'
     , 'https://www.fryntiz.es'
     , 'Cádiz'
     , 'Chipiona'
@@ -60,10 +86,16 @@ INSERT INTO usuarios_datos (
     , 'M'
     , '@editor'
     , 2
+    , crypt('1234', gen_salt('bf', 13))
+    , 'user1@domain.com'
+    , 'editor'
+    , ''
+    , 'temp2'
   )
 
   , (
-      'Pepe'
+      3
+    , 'Pepe'
     , 'https://www.fryntiz.es'
     , 'Cádiz'
     , 'Chipiona'
@@ -75,43 +107,11 @@ INSERT INTO usuarios_datos (
     , 'M'
     , '@pepeitor'
     , 3
-  )
-;
-
-INSERT INTO usuarios (password, email, nick, auth_key, token, datos_id, rol_id,
-                      ip)
-VALUES
-  (
-      crypt('admin', gen_salt('bf', 13))
-    , 'admin@admin.com'
-    , 'admin'
-    , ''
-    , 'temp1'
-    , 1
-    , 1
-    , '199.199.199.199'
-  )
-
-  , (
-    crypt('1234', gen_salt('bf', 13))
-    , 'user1@domain.com'
-    , 'editor'
-    , ''
-    , 'temp2'
-    , 2
-    , 2
-    , '199.199.199.200'
-  )
-
-  , (
-    crypt('1234', gen_salt('bf', 13))
+    , crypt('1234', gen_salt('bf', 13))
     , 'user2@domain.com'
     , 'pepeneitor3000'
     , ''
     , 'temp3'
-    , 3
-    , 3
-    , '199.199.199.201'
   )
 ;
 
