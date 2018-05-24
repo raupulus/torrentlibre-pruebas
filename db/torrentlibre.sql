@@ -57,12 +57,13 @@ CREATE TABLE preferencias (
 ---------------------------------------------------
 --                    Usuarios                   --
 ---------------------------------------------------
-DROP TABLE IF EXISTS usuarios CASCADE;
+DROP TABLE IF EXISTS usuarios_id CASCADE;
 
 /*
- * Usuarios y datos menos sensible
+ * Usuarios y datos del programa (no sensible), nunca se eliminará.
+ * Este identificador relaciona 1:1 a un usuario de la tabla "usuarios"
  */
-CREATE TABLE usuarios (
+CREATE TABLE usuarios_id (
     id               BIGSERIAL     PRIMARY KEY
 
   , created_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
@@ -76,13 +77,14 @@ CREATE TABLE usuarios (
 );
 
 
-DROP TABLE IF EXISTS usuarios_datos CASCADE;
+DROP TABLE IF EXISTS usuarios CASCADE;
 
 /*
- * Datos sensibles de usuarios
+ * Usuario y datos sensibles, se puede borrar ya que se relacionará
+ * sobre usuarios_id
  */
-CREATE TABLE usuarios_datos (
-    id               BIGINT        PRIMARY KEY REFERENCES usuarios (id)
+CREATE TABLE usuarios (
+    id               BIGINT        PRIMARY KEY REFERENCES usuarios_id (id)
                                    ON DELETE CASCADE
   , nombre           VARCHAR(255)
   , nick             VARCHAR(255)  NOT NULL UNIQUE

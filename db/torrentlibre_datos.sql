@@ -28,7 +28,7 @@ INSERT INTO preferencias (tema_id) VALUES
 ---------------------------------------------------
 --                    Usuarios                   --
 ---------------------------------------------------
-INSERT INTO usuarios (rol_id,ip)
+INSERT INTO usuarios_id (rol_id,ip)
 VALUES
   (
       1
@@ -46,7 +46,7 @@ VALUES
 )
 ;
 
-INSERT INTO usuarios_datos (
+INSERT INTO usuarios (
   id, nombre, web, localidad, provincia, direccion, telefono, biografia,
   fecha_nacimiento, geoloc, sexo, twitter, preferencias_id, password, email,
   nick, auth_key, token

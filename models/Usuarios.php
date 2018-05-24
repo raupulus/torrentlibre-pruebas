@@ -8,10 +8,24 @@ use Yii;
  * This is the model class for table "usuarios".
  *
  * @property int $id
- * @property string $created_at
- * @property string $updated_at
- * @property int $rol_id
- * @property string $ip
+ * @property string $nombre
+ * @property string $nick
+ * @property string $email
+ * @property string $password
+ * @property string $auth_key
+ * @property string $token
+ * @property string $web
+ * @property string $localidad
+ * @property string $provincia
+ * @property string $direccion
+ * @property string $telefono
+ * @property string $biografia
+ * @property string $fecha_nacimiento
+ * @property string $geoloc
+ * @property string $sexo
+ * @property string $twitter
+ * @property int $preferencias_id
+ * @property string $avatar
  *
  * @property Comentarios[] $comentarios
  * @property Demandas[] $demandas
@@ -22,9 +36,9 @@ use Yii;
  * @property ReportesTorrents[] $reportesTorrents
  * @property Torrents[] $torrents0
  * @property Torrents[] $torrents1
- * @property Roles $rol
+ * @property Preferencias $preferencias
+ * @property UsuariosId $id0
  * @property UsuariosBloqueados $usuariosBloqueados
- * @property UsuariosDatos $usuariosDatos
  */
 class Usuarios extends \yii\db\ActiveRecord
 {
@@ -42,11 +56,18 @@ class Usuarios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at'], 'safe'],
-            [['rol_id'], 'default', 'value' => null],
-            [['rol_id'], 'integer'],
-            [['ip'], 'string', 'max' => 15],
-            [['rol_id'], 'exist', 'skipOnError' => true, 'targetClass' => Roles::className(), 'targetAttribute' => ['rol_id' => 'id']],
+            [['id', 'nick', 'email', 'password'], 'required'],
+            [['id', 'preferencias_id'], 'default', 'value' => null],
+            [['id', 'preferencias_id'], 'integer'],
+            [['fecha_nacimiento'], 'safe'],
+            [['nombre', 'nick', 'email', 'password', 'auth_key', 'token', 'web', 'localidad', 'provincia', 'direccion', 'telefono', 'biografia', 'geoloc', 'twitter', 'avatar'], 'string', 'max' => 255],
+            [['sexo'], 'string', 'max' => 1],
+            [['email'], 'unique'],
+            [['nick'], 'unique'],
+            [['token'], 'unique'],
+            [['id'], 'unique'],
+            [['preferencias_id'], 'exist', 'skipOnError' => true, 'targetClass' => Preferencias::className(), 'targetAttribute' => ['preferencias_id' => 'id']],
+            [['id'], 'exist', 'skipOnError' => true, 'targetClass' => UsuariosId::className(), 'targetAttribute' => ['id' => 'id']],
         ];
     }
 
@@ -57,10 +78,24 @@ class Usuarios extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'rol_id' => 'Rol ID',
-            'ip' => 'Ip',
+            'nombre' => 'Nombre',
+            'nick' => 'Nick',
+            'email' => 'Email',
+            'password' => 'Password',
+            'auth_key' => 'Auth Key',
+            'token' => 'Token',
+            'web' => 'Web',
+            'localidad' => 'Localidad',
+            'provincia' => 'Provincia',
+            'direccion' => 'Direccion',
+            'telefono' => 'Telefono',
+            'biografia' => 'Biografia',
+            'fecha_nacimiento' => 'Fecha Nacimiento',
+            'geoloc' => 'Geoloc',
+            'sexo' => 'Sexo',
+            'twitter' => 'Twitter',
+            'preferencias_id' => 'Preferencias ID',
+            'avatar' => 'Avatar',
         ];
     }
 
@@ -139,9 +174,17 @@ class Usuarios extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRol()
+    public function getPreferencias()
     {
-        return $this->hasOne(Roles::className(), ['id' => 'rol_id']);
+        return $this->hasOne(Preferencias::className(), ['id' => 'preferencias_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getId0()
+    {
+        return $this->hasOne(UsuariosId::className(), ['id' => 'id']);
     }
 
     /**
@@ -150,13 +193,5 @@ class Usuarios extends \yii\db\ActiveRecord
     public function getUsuariosBloqueados()
     {
         return $this->hasOne(UsuariosBloqueados::className(), ['usuario_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsuariosDatos()
-    {
-        return $this->hasOne(UsuariosDatos::className(), ['id' => 'id']);
     }
 }
