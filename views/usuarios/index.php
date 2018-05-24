@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use @app\helpers\fechas;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UsuariosSearch */
@@ -74,18 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>Pruebas</h1>
     <?php
-        /*
-         * Recibe 1 o dos cadenas con forma de fecha y devuelve la diferencia
-         * @param $fecha1 Fecha más baja del rango.
-         * @param $fecha2 Fecha más alta del rango (Es opcional, en su ausencia
-         *                se entenderá que es la fecha actual).
-         */
-        function calcularDiferencia($fecha1, $fecha2 = 'now') {
-            $fecha1 = new DateTime($fecha1);
-            $fecha2 = new DateTime($fecha2);
 
-            return date_diff($fecha1, $fecha2)->format('%y');
-        }
 
         // Prueba de la función
         $f1 = $dataProvider->models[0]->fecha_nacimiento;
