@@ -1,6 +1,6 @@
 .PHONY: all test tests cs codecept pre_codecept post_codecept run_codecept \
 	fastcs fast phpcs docs api doc-src guide guia doc-src install db psql \
-	clean permisos perm p requeriments req
+	clean permisos perm p requeriments req dbh dbheroku
 
 all: requeriments install db permisos
 
