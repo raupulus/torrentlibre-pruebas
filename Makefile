@@ -49,6 +49,10 @@ dbfull:
 	db/create.sh
 	db/load.sh
 
+dbh dbheroku:
+	heroku psql < db/torrentlibre.sql
+	heroku psql < db/torrentlibre_datos.sql
+
 psql:
 	db/psql.sh
 
