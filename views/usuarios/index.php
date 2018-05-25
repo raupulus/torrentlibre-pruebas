@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use @app\helpers\fechas;
+use app\helpers\Fechas;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UsuariosSearch */
@@ -63,22 +63,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'provincia',
             'direccion',
             'telefono',
-            'fecha_nacimiento',
+            //'fecha_nacimiento',
+            [
+                'attribute' => 'fecha_nacimiento',
+                'format' => 'raw',
+                'value' => function($model, $key, $index) {
+                    return Fechas::calcularDiferencia($model['fecha_nacimiento']);
+                }
+            ],
             'geoloc',
             'sexo',
+            'usuariosId.rol.tipo',  // Tipo de rol
             //'preferencias_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-
-
-    <h1>Pruebas</h1>
-    <?php
-
-
-        // Prueba de la función
-        $f1 = $dataProvider->models[0]->fecha_nacimiento;
-        echo calcularDiferencia($f1);
-    ?>
 </div>

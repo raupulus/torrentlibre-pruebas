@@ -87,10 +87,10 @@ class Usuarios extends \yii\db\ActiveRecord
             'web' => 'Web',
             'localidad' => 'Localidad',
             'provincia' => 'Provincia',
-            'direccion' => 'Direccion',
-            'telefono' => 'Telefono',
-            'biografia' => 'Biografia',
-            'fecha_nacimiento' => 'Fecha Nacimiento',
+            'direccion' => 'Dirección',
+            'telefono' => 'Teléfono',
+            'biografia' => 'Biografía',
+            'fecha_nacimiento' => 'Edad',
             'geoloc' => 'Geoloc',
             'sexo' => 'Sexo',
             'twitter' => 'Twitter',
@@ -182,7 +182,7 @@ class Usuarios extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getId0()
+    public function getUsuariosId()
     {
         return $this->hasOne(UsuariosId::className(), ['id' => 'id']);
     }

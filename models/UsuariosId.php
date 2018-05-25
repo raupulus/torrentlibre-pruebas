@@ -50,7 +50,7 @@ class UsuariosId extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'rol_id' => 'Rol ID',
-            'ip' => 'Ip',
+            'ip' => 'Última IP',
         ];
     }
 
