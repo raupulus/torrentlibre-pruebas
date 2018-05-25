@@ -10,6 +10,10 @@ use app\helpers\Fechas;
 
 $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
+
+// Registro assets para esta vista
+
+
 ?>
 <div class="usuarios-index">
 
@@ -30,8 +34,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'biografia',
             'twitter',
-            'avatar',
+            //'avatar',
+            [
+                'attribute' => 'avatar',
+                'format' => 'raw',
+                'value' => function($model, $key, $index) {
+                    $img = $model->avatar;
+                    $ruta = yii::getAlias('@r_avatar').'/';
 
+                    if ((! isset($img)) || (! file_exists($ruta))) {
+                        $img = 'default.png';
+                    }
+
+                    return '<img src="'.$ruta.$img.'" />';
+                }
+            ],
             //'password',
             //'auth_key',
             //'token',

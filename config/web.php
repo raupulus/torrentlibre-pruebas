@@ -4,6 +4,10 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 $log = require __DIR__ . '/log.php';
 
+// Consigo aquí la URL del dominio raíz
+$webroot = dirname(__DIR__) . '/www';
+$url = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
@@ -11,6 +15,8 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@r_avatar' => $url.$params['rutaAvatar'],
+        '@tmp' => '@app/'.$params['tmp'],
     ],
     'language' => 'es-ES',
     'components' => [
