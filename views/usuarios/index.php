@@ -12,7 +12,7 @@ $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 
 // Registro assets para esta vista
-
+AppAsset::register($this);
 
 ?>
 <div class="usuarios-index">
