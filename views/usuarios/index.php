@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\UsuariosIndexAsset;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\helpers\Fechas;
@@ -12,7 +13,7 @@ $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 
 // Registro assets para esta vista
-AppAsset::register($this);
+UsuariosIndexAsset::register($this);
 
 ?>
 <div class="usuarios-index">
@@ -25,6 +26,13 @@ AppAsset::register($this);
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'class' => 'grid-view',
+        'tableOptions' => [
+            'class' => 'tablaUsuariosIndex'
+        ],
+        'filterRowOptions' => [
+            'class' => 'trSearch'
+        ],
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
 
@@ -71,6 +79,13 @@ AppAsset::register($this);
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'class' => 'grid-view',
+        'tableOptions' => [
+            'class' => 'tablaUsuariosIndex'
+        ],
+        'filterRowOptions' => [
+            'class' => 'trSearch'
+        ],
         'columns' => [
             'id',
             'nombre',

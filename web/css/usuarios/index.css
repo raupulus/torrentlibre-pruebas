@@ -4,3 +4,42 @@
  * @copyright Copyright © 2017 Raúl Caro Pastorino
  * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
  */
+
+.grid-view {
+    border: 2px solid #f5e79e;
+}
+
+.grid-view .tablaUsuariosIndex {
+
+}
+
+.trSearch {
+
+}
+
+.trSearch td {
+    background-color: white;
+}
+
+.grid-view .tablaUsuariosIndex  tr {
+    border-top: 1px solid #000000;
+}
+
+.grid-view .tablaUsuariosIndex  tr:nth-child(+2) {
+    background-color: #ddd;
+}
+
+.grid-view .tablaUsuariosIndex  tr:nth-child(oden) {
+    background-color: #fff;
+}
+
+.grid-view .tablaUsuariosIndex tr td img {
+    width: 80px;
+}
+
+.grid-view .tablaUsuariosIndex th, .grid-view .tablaUsuariosIndex td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+
