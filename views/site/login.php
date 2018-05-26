@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-        <?= $form->field($model, 'nick')->textInput(['autofocus' => true]) ?>
+        <?= $form->field($model, 'login')->textInput(['autofocus' => true]) ?>
 
         <?= $form->field($model, 'password')->passwordInput() ?>
 
@@ -33,9 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
 
         <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
+            <div class="col-lg-offset-1 col-lg-10">
                 <?= Html::submitButton('Entrar', ['class' => 'btn btn-primary',
                     'name' => 'login-button']) ?>
+                <?= Html::a('Crear Cuenta', ['usuarios/create'], ['class' => '',
+                    'name' => 'Crear cuenta']) ?>
             </div>
         </div>
 
@@ -51,7 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <ul>
             <li>admin → Es el administrador, con la contraseña:
-                <strong>admin</strong>.
+                <strong>admin</strong> y su correo:
+                <strong>admin@admin.com</strong>.
             </li>
 
             <li>editor → Es un usuario moderador/editor, con la contraseña:

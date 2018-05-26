@@ -13,7 +13,7 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
-    public $nick;
+    public $login;
     public $password;
     public $rememberMe = true;
 
@@ -27,11 +27,19 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['nick', 'password'], 'required'],
+            [['login', 'password'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'login' => 'Nick/Email',
+            'password' => 'Contraseña',
         ];
     }
 
@@ -66,7 +74,7 @@ class LoginForm extends Model
     }
 
     /**
-     * Finds user by [[username]]
+     * Busca usuarios por [[nick]] o en su defecto por [[email]]
      *
      * @return User|null
      */
@@ -75,8 +83,14 @@ class LoginForm extends Model
         if ($this->_user === false) {
             //$this->_user = User::findByUsername($this->username);
             $this->_user = Usuarios::findOne([
-                'nick' => $this->nick
+                'nick' => $this->login
             ]);
+
+            if (! isset($this->_user)) {
+                $this->_user = Usuarios::findOne([
+                    'email' => $this->login
+                ]);
+            }
         }
         return $this->_user;
     }
