@@ -1,11 +1,18 @@
 <?php
 
+/**
+ * @author Raúl Caro Pastorino
+ * @link http://www.fryntiz.es
+ * @copyright Copyright (c) 2018 Raúl Caro Pastorino
+ * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
+**/
+
 namespace app\models;
 
 use Yii;
 
 /**
- * This is the model class for table "usuarios".
+ * Este es el modelo para la clase "usuarios".
  *
  * @property int $id
  * @property string $nombre

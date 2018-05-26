@@ -1,6 +1,6 @@
 <?php
 
-use app\assets\UsuariosIndexAsset;
+use app\assets\UsuariosAsset;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\helpers\Fechas;
@@ -13,7 +13,7 @@ $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 
 // Registro assets para esta vista
-UsuariosIndexAsset::register($this);
+UsuariosAsset::register($this);
 
 ?>
 <div class="usuarios-index">
@@ -21,8 +21,9 @@ UsuariosIndexAsset::register($this);
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <h3>Datos básicos</h3>
+    <h3>Usuarios Registrados</h3>
 
+    <!-- Esta vista solo la puede ver el administrador -->
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -34,62 +35,10 @@ UsuariosIndexAsset::register($this);
             'class' => 'trSearch'
         ],
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'nombre',
             'nick',
             'email:email',
-            'biografia',
-            'twitter',
-            //'avatar',
-            [
-                'attribute' => 'avatar',
-                'format' => 'raw',
-                'value' => function($model, $key, $index) {
-                    $img = $model->avatar;
-                    $ruta = yii::getAlias('@r_avatar').'/';
-
-                    if ((! isset($img)) || (! file_exists($ruta))) {
-                        $img = 'default.png';
-                    }
-
-                    return '<img src="'.$ruta.$img.'" />';
-                }
-            ],
-            //'password',
-            //'auth_key',
-            //'token',
-            //'web',
-            //'localidad',
-            //'provincia',
-            //'direccion',
-            //'telefono',
-            //'fecha_nacimiento',
-            //'geoloc',
-            //'sexo',
-            //'preferencias_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
-    <h3>Datos personales</h3>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'class' => 'grid-view',
-        'tableOptions' => [
-            'class' => 'tablaUsuariosIndex'
-        ],
-        'filterRowOptions' => [
-            'class' => 'trSearch'
-        ],
-        'columns' => [
-            'id',
-            'nombre',
-            'nick',
             'web',
             'localidad',
             'provincia',
@@ -106,6 +55,57 @@ UsuariosIndexAsset::register($this);
             'geoloc',
             'sexo',
             'usuariosId.rol.tipo',  // Tipo de rol
+            //'preferencias_id',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+    <!-- Esta vista la puede ver cualquier usuario registrado -->
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'class' => 'grid-view',
+        'tableOptions' => [
+            'class' => 'tablaUsuariosIndex'
+        ],
+        'filterRowOptions' => [
+            'class' => 'trSearch'
+        ],
+        'columns' => [
+            //['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'attribute' => 'avatar',
+                'format' => 'raw',
+                'value' => function($model, $key, $index) {
+                    $img = $model->avatar;
+                    $ruta = yii::getAlias('@r_avatar').'/';
+
+                    if ((! isset($img)) || (! file_exists($ruta.$img))) {
+                        $img = 'default.png';
+                    }
+
+                    return '<img src="'.$ruta.$img.'" />';
+                }
+            ],
+
+            'nick',
+            'biografia',
+            'twitter',
+            //'avatar',
+
+            //'password',
+            //'auth_key',
+            //'token',
+            //'web',
+            //'localidad',
+            //'provincia',
+            //'direccion',
+            //'telefono',
+            //'fecha_nacimiento',
+            //'geoloc',
+            //'sexo',
             //'preferencias_id',
 
             ['class' => 'yii\grid\ActionColumn'],
