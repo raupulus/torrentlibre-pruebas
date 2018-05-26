@@ -15,6 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 // Registro assets para esta vista
 UsuariosAsset::register($this);
 
+// Variables
+if (!Yii::$app->user->isGuest) {
+    $rol = Yii::$app->user->identity->rol;
+}
 ?>
 <div class="usuarios-index">
 
@@ -24,6 +28,7 @@ UsuariosAsset::register($this);
     <h3>Usuarios Registrados</h3>
 
     <!-- Esta vista solo la puede ver el administrador -->
+    <?php if (isset($rol) && ($rol === 'admin')): ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -60,6 +65,7 @@ UsuariosAsset::register($this);
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?php endif; ?>
 
     <!-- Esta vista la puede ver cualquier usuario registrado -->
     <?= GridView::widget([

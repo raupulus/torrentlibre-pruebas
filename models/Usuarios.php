@@ -225,6 +225,15 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return $this->hasOne(UsuariosBloqueados::className(), ['usuario_id' => 'id']);
     }
 
+    /**
+     * Devuelve el rol del usuario
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRol()
+    {
+        return $this->usuariosId->rol->tipo;
+    }
+
 
     /**
      * Acciones llevadas a cabo antes de insertar un usuario
