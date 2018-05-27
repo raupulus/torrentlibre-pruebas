@@ -37,11 +37,10 @@ class UsuariosController extends Controller
 
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view'],
+                'only' => ['index', 'view', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['logout'],
                         'roles' => ['@'],
                     ],
                 ],

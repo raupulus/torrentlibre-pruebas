@@ -1,6 +1,6 @@
 <?php
 
-use app\assets\UsuariosAsset;
+use app\assets\UsuariosIndexAsset;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\helpers\Fechas;
@@ -13,7 +13,7 @@ $this->title = 'Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 
 // Registro assets para esta vista
-UsuariosAsset::register($this);
+UsuariosIndexAsset::register($this);
 
 // Variables
 if (!Yii::$app->user->isGuest) {

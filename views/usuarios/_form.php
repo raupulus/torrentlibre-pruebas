@@ -25,47 +25,63 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'token')->textInput(['maxlength' => true]) ?>
 
+    <div class="form-dividido">
+        <h3>Datos Básicos</h3>
+        <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'nick')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'nick')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
-
-
-
-    <?= $form->field($model, 'localidad')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'provincia')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'direccion')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'telefono')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+    </div>
 
 
-    <?= $form->field($model, 'biografia')->textInput(['maxlength' => true]) ?>
+    <div class="form-dividido">
+        <h3>Datos Opcionales</h3>
+        <?= $form->field($model, 'localidad')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'web')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'provincia')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'twitter')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'direccion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'avatar')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'telefono')->textInput(['maxlength' => true]) ?>
 
+        <?= $form->field($model, 'fecha_nacimiento')->textInput() ?>
 
-    <?= $form->field($model, 'fecha_nacimiento')->textInput() ?>
+        <?= $form->field($model, 'sexo')->textInput(['maxlength' => true]) ?>
+    </div>
 
-    <?= $form->field($model, 'geoloc')->textInput(['maxlength' => true]) ?>
+    <div class="form-dividido">
+        <h3>Datos Sociales</h3>
+        <?= $form->field($model, 'biografia')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'sexo')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'web')->textInput(['maxlength' => true]) ?>
 
+        <?= $form->field($model, 'twitter')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'avatar')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'geoloc')->textInput(['maxlength' => true]) ?>
+    </div>
 
     <?php // $form->field($model, 'preferencias_id')->textInput() ?>
 
+    <div class="form-group">
+        <div class="btn-anterior-box">
+            <?= Html::buttonInput('Anterior', ['class' =>
+                'btn-form btn-anterior']) ?>
+        </div>
+        <div class="btn-siguiente-box">
+            <?= Html::buttonInput('Siguiente', ['class' => 'btn-form btn-siguiente']) ?>
+        </div>
+    </div>
+
 
     <div class="form-group">
-        <?= Html::submitButton('Confirmar', ['class' => 'btn btn-success']) ?>
+        <div class="btn-confirmar-box">
+            <?= Html::submitButton('Confirmar', ['class' => 'btn-form btn-confirmar']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

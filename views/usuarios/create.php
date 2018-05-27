@@ -7,6 +7,7 @@
  * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
 **/
 
+use app\assets\UsuariosCreateAsset;
 use yii\helpers\Html;
 
 
@@ -16,6 +17,10 @@ use yii\helpers\Html;
 $this->title = 'Crear nuevo usuario';
 $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+// Registro assets para esta vista
+UsuariosCreateAsset::register($this);
+
 ?>
 <div class="usuarios-create">
 
