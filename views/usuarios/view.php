@@ -67,6 +67,8 @@ if (!Yii::$app->user->isGuest) {
                         return '<img src="'.$ruta.$img.'" />';
                     }
                 ],
+                'usuariosId.rol.tipo',
+                'usuariosId.ip',
             ],
         ]) ?>
 
@@ -102,6 +104,8 @@ if (!Yii::$app->user->isGuest) {
                 'geoloc',
                 //'sexo',
                 'twitter',
+                'usuariosId.rol.tipo',
+                'usuariosId.ip',
             ],
         ]) ?>
 
@@ -129,6 +133,7 @@ if (!Yii::$app->user->isGuest) {
             'nombre',
             'web',
             'biografia',
+            'usuariosId.rol.tipo',
         ],
     ]) ?>
     <?php endif ?>
