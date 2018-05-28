@@ -15,6 +15,14 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<div class="nav-form-usuario">
+    <ul>
+        <li><a href="#datos-basicos">Datos básicos</a></li>
+        <li><a href="#datos-opcionales">Datos Opcionales</a></li>
+        <li><a href="#datos-sociales">Datos Sociales</a></li>
+    </ul>
+</div>
+
 <div class="usuarios-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -25,7 +33,7 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'token')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-dividido">
+    <div id="datos-basicos" class="form-dividido">
         <h3>Datos Básicos</h3>
         <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
@@ -41,7 +49,7 @@ use yii\widgets\ActiveForm;
     </div>
 
 
-    <div class="form-dividido">
+    <div id="datos-opcionales" class="form-dividido">
         <h3>Datos Opcionales</h3>
         <?= $form->field($model, 'localidad')->textInput(['maxlength' => true]) ?>
 
@@ -56,7 +64,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'sexo')->textInput(['maxlength' => true]) ?>
     </div>
 
-    <div class="form-dividido">
+    <div id="datos-sociales" class="form-dividido">
         <h3>Datos Sociales</h3>
         <?= $form->field($model, 'biografia')->textInput(['maxlength' => true]) ?>
 
@@ -84,7 +92,8 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <div class="btn-confirmar-box">
-            <?= Html::submitButton('Confirmar', ['class' => 'btn-form btn-confirmar']) ?>
+            <?= Html::submitButton('Crear Cuenta', ['class' => 'btn-form 
+            btn-confirmar']) ?>
         </div>
     </div>
 

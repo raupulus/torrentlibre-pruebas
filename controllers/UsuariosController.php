@@ -9,6 +9,7 @@
 
 namespace app\controllers;
 
+use app\models\Preferencias;
 use app\models\UsuariosId;
 use function var_dump;
 use Yii;
@@ -89,12 +90,22 @@ class UsuariosController extends Controller
     {
         $model = new Usuarios(['scenario' => Usuarios::ESCENARIO_CREATE]);
 
-        // Creo un nuevo id para este usuarios desde "usuarios_id"
-        $usuario_id = new UsuariosId();
+        if ($model->load(Yii::$app->request->post())) {
+            // Creo un nuevo id para este usuarios desde "usuarios_id"
+            $usuario_id = new UsuariosId();
+
+            // Creo nuevo id para preferencias_id desde "preferencias"
+            $preferencias = new Preferencias(['tema_id' => 1]);
+        }
 
         // Si entra mediante POST y puedo crear el usuario_id lo cargo al modelo
-        if ($model->load(Yii::$app->request->post()) && $usuario_id->save()) {
+        if ($model->load(Yii::$app->request->post()) &&
+            $usuario_id->save() &&
+            $preferencias->save()
+        ) {
             $model->id = $usuario_id->id;
+            $model->preferencias_id = $preferencias->id;
+
             $model->imagen = UploadedFile::getInstance($model, 'imagen');
 
             if ($model->imagen !== null) {
@@ -104,7 +115,6 @@ class UsuariosController extends Controller
             }
 
             if ($model->save() && $model->upload()) {
-                //$model->lo
                 Yii::$app->user->login($model);
                 return $this->redirect(['view', 'id' => $model->id]);
             }

@@ -116,10 +116,10 @@ if (!Yii::$app->user->isGuest) {
             'attributes' => [
                 'preferencias.tema.nombre',
                 'preferencias.tema.descripcion',
-                'preferencias.promociones',
-                'preferencias.noticias',
-                'preferencias.resumen',
-                'preferencias.tour',
+                'preferencias.promociones:boolean',
+                'preferencias.noticias:boolean',
+                'preferencias.resumen:boolean',
+                'preferencias.tour:boolean',
             ],
         ]) ?>
 

@@ -5,9 +5,35 @@
  * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
  */
 
-/********************************
- * Formulario al crear usuarios *
- *******************************/
+/*****************************************
+ *     Menú de navegación formulario     *
+ *****************************************/
+.nav-form-usuario {
+    width: 100%;
+    text-align: center;
+    background-color: #0e2231;
+    font-weight: bolder;
+    border-radius: 5px 5px 0 0;
+}
+
+.nav-form-usuario ul li {
+    margin: 0 10px;
+    display: inline-block;
+}
+
+.nav-form-usuario ul li a {
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+.nav-form-usuario ul li a:hover {
+    color: black;
+    background-color: #00cc66;
+}
+
+/*****************************************
+ *      Formulario al crear usuarios     *
+ *****************************************/
 .form-dividido {
     margin: 15px 0;
     padding: 8px 12px;

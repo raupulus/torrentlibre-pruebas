@@ -51,7 +51,7 @@ CREATE TABLE preferencias (
   , promociones      BOOLEAN       DEFAULT true
   , noticias         BOOLEAN       DEFAULT true
   , resumen          BOOLEAN       DEFAULT true
-  , tour             BOOLEAN       DEFAULT true
+  , tour             BOOLEAN       DEFAULT true  -- Realizar tour inicial
 );
 
 ---------------------------------------------------
@@ -70,9 +70,9 @@ CREATE TABLE usuarios_id (
   , updated_at       TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
   --, datos_id         BIGINT        REFERENCES usuarios_datos (id)
   , rol_id           BIGINT        DEFAULT 1
-  NOT NULL REFERENCES roles (id)
-  ON DELETE NO ACTION
-  ON UPDATE CASCADE
+                                   NOT NULL REFERENCES roles (id)
+                                   ON DELETE NO ACTION
+                                   ON UPDATE CASCADE
   , ip               VARCHAR(15)  -- Última IP de acceso
 );
 
@@ -85,7 +85,8 @@ DROP TABLE IF EXISTS usuarios CASCADE;
  */
 CREATE TABLE usuarios (
     id               BIGINT        PRIMARY KEY REFERENCES usuarios_id (id)
-                                   ON DELETE CASCADE
+                                   ON DELETE NO ACTION
+                                   ON UPDATE CASCADE
   , nombre           VARCHAR(255)
   , nick             VARCHAR(255)  NOT NULL UNIQUE
   , email            VARCHAR(255)  NOT NULL UNIQUE
@@ -104,6 +105,8 @@ CREATE TABLE usuarios (
                                    --CHECK (sexo = 'F'OR sexo = 'M')
   , twitter          VARCHAR(255)
   , preferencias_id  BIGINT        REFERENCES preferencias (id)
+                                   ON DELETE CASCADE
+                                   ON UPDATE CASCADE
   , avatar           VARCHAR(255)
 );
 

@@ -9,6 +9,7 @@
 
 namespace app\models;
 
+use function var_dump;
 use Yii;
 use yii\web\IdentityInterface;
 use yii\helpers\Url;

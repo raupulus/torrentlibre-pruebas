@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\UsuariosCreateAsset;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -7,8 +8,12 @@ use yii\helpers\Html;
 
 $this->title = 'Modificar Usuario ' . $model->nombre . ' ('. $model->nick . ')';
 $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = ['label' => $model->nombre, 'url' => ['view',
+    'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Modificar Usuario';
+
+// Registro assets para esta vista
+UsuariosCreateAsset::register($this);
 ?>
 <div class="usuarios-update">
 
