@@ -297,7 +297,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         if ($this->imagen === null) {
             return true;
         }
-        $nombre = Yii::getAlias('@r_avatar/') .  $this->imagen->baseName . '.' . $this->imagen->extension;
+        $nombre = Yii::getAlias('@r_avatar/') .
+                  $this->id . '-' .
+                  $this->imagen->baseName . '.' .
+                  $this->imagen->extension;
         $res = $this->imagen->saveAs($nombre);
         if ($res) {
             Image::thumbnail($nombre, 250, null)->save($nombre);

@@ -97,6 +97,12 @@ class UsuariosController extends Controller
             $model->id = $usuario_id->id;
             $model->imagen = UploadedFile::getInstance($model, 'imagen');
 
+            if ($model->imagen !== null) {
+                $model->avatar = $model->id . '-' .
+                                 $model->imagen->baseName . '.' .
+                                 $model->imagen->extension;
+            }
+
             if ($model->save() && $model->upload()) {
                 //$model->lo
                 Yii::$app->user->login($model);
