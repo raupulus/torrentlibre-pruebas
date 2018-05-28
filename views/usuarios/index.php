@@ -74,7 +74,7 @@ if (!Yii::$app->user->isGuest) {
             'usuariosId.rol.tipo',  // Tipo de rol
             //'preferencias_id',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
@@ -108,7 +108,17 @@ if (!Yii::$app->user->isGuest) {
                 }
             ],
 
-            'nick',
+            [
+                'attribute' => 'nick',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a($model->nick, [
+                        Url::to('usuarios/view'),
+                        'id' => $model->id
+                    ]);
+                }
+            ],
+
             'biografia',
             'twitter',
             //'avatar',

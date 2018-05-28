@@ -4,9 +4,9 @@ CREATE EXTENSION pgcrypto;
 --                     Roles                     --
 ---------------------------------------------------
 INSERT INTO roles (tipo, descripcion) VALUES
-    ('admin', 'Administrador principal de la aplicación')
+    ('basic', 'Usuario básico logueado que puede subir torrents')
   , ('editor', 'Puede moderar, bloquear usuarios y ver estadísticas')
-  , ('basic', 'Usuario básico logueado que puede subir torrents')
+  , ('admin', 'Administrador principal de la aplicación')
 ;
 
 ---------------------------------------------------
@@ -31,7 +31,7 @@ INSERT INTO preferencias (tema_id) VALUES
 INSERT INTO usuarios_id (rol_id,ip)
 VALUES
   (
-      1
+      3
     , '199.199.199.199'
   )
 
@@ -41,7 +41,7 @@ VALUES
 )
 
   , (
-      3
+      1
     , '199.199.199.201'
 )
 ;
