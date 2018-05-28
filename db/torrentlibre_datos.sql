@@ -55,8 +55,8 @@ INSERT INTO usuarios (
       1
     , 'Administrador'
     , 'https://www.fryntiz.es'
-    , 'Cádiz'
     , 'Chipiona'
+    , 'Cádiz'
     , 'Calle Oculta'
     , '000000000'
     , 'Estudiando DAW'
@@ -76,8 +76,8 @@ INSERT INTO usuarios (
       2
     , 'Editor'
     , 'https://www.fryntiz.es'
-    , 'Cádiz'
     , 'Chipiona'
+    , 'Cádiz'
     , 'Calle Oculta'
     , '000000001'
     , 'Estudiando DAW'
@@ -97,8 +97,8 @@ INSERT INTO usuarios (
       3
     , 'Pepe'
     , 'https://www.fryntiz.es'
-    , 'Cádiz'
     , 'Chipiona'
+    , 'Cádiz'
     , 'Calle Oculta'
     , '000000002'
     , 'Estudiando DAW'

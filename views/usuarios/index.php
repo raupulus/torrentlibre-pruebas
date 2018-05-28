@@ -4,6 +4,7 @@ use app\assets\UsuariosIndexAsset;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\helpers\Fechas;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UsuariosSearch */
@@ -41,13 +42,24 @@ if (!Yii::$app->user->isGuest) {
         ],
         'columns' => [
             'id',
-            'nombre',
-            'nick',
+            //'nombre',
+            //'nick',
+            [
+                'attribute' => 'nick',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a($model->nick, [
+                        Url::to('usuarios/view'),
+                        'id' => $model->id
+                    ]);
+                }
+            ],
             'email:email',
-            'web',
-            'localidad',
+            //'web',
+            'usuariosId.ip',
+            //'localidad',
             'provincia',
-            'direccion',
+            //'direccion',
             'telefono',
             //'fecha_nacimiento',
             [
@@ -57,16 +69,16 @@ if (!Yii::$app->user->isGuest) {
                     return Fechas::calcularDiferencia($model['fecha_nacimiento']);
                 }
             ],
-            'geoloc',
-            'sexo',
+            //'geoloc',
+            //'sexo',
             'usuariosId.rol.tipo',  // Tipo de rol
             //'preferencias_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <?php endif; ?>
 
+    <?php else: ?>
     <!-- Esta vista la puede ver cualquier usuario registrado -->
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -117,4 +129,5 @@ if (!Yii::$app->user->isGuest) {
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?php endif; ?>
 </div>

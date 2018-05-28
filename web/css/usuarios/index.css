@@ -6,7 +6,10 @@
  */
 
 .grid-view {
-    border: 2px solid #f5e79e;
+    margin: 25px 5px;
+    border: 8px solid #f5e79e;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px black;
 }
 
 .grid-view .tablaUsuariosIndex {
@@ -25,7 +28,7 @@
     border-top: 1px solid #000000;
 }
 
-.grid-view .tablaUsuariosIndex  tr:nth-child(+2) {
+.grid-view .tablaUsuariosIndex  tr:nth-child(even) {
     background-color: #ddd;
 }
 
