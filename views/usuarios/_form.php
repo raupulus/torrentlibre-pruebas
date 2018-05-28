@@ -34,6 +34,9 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'password_repeat')->passwordInput(['maxlength'
+        => true]) ?>
     </div>
 
 
@@ -60,7 +63,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'twitter')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'avatar')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'imagen')->fileInput() ?>
 
         <?= $form->field($model, 'geoloc')->textInput(['maxlength' => true]) ?>
     </div>

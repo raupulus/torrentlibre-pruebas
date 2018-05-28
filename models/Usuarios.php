@@ -10,6 +10,9 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
+use yii\helpers\Url;
+use yii\imagine\Image;
 
 /**
  * Este es el modelo para la clase "usuarios".
@@ -47,7 +50,7 @@ use Yii;
  * @property UsuariosId $id0
  * @property UsuariosBloqueados $usuariosBloqueados
  */
-class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
+class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 {
     /**
      * @const ESCENARIO_CREATE Constante para cuando estamos insertando
@@ -67,10 +70,10 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     public $password_repeat;
 
     /**
-     * Foto subida mediante el formulario.
+     * Imagen subida mediante el formulario.
      * @var UploadedFile
      */
-    public $foto;
+    public $imagen;
 
     /**
      * {@inheritdoc}
@@ -90,7 +93,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             [['id', 'preferencias_id'], 'default', 'value' => null],
             [['id', 'preferencias_id'], 'integer'],
             [['fecha_nacimiento'], 'safe'],
-            [['nombre', 'nick', 'email', 'password', 'auth_key', 'token', 'web', 'localidad', 'provincia', 'direccion', 'telefono', 'biografia', 'geoloc', 'twitter', 'avatar'], 'string', 'max' => 255],
+            [['nombre', 'nick', 'email', 'auth_key', 'token', 'web', 'localidad', 'provincia', 'direccion', 'telefono', 'biografia', 'geoloc', 'twitter', 'avatar'], 'string', 'max' => 255],
             [['sexo'], 'string', 'max' => 1],
             [['email'], 'unique'],
             [['nick'], 'unique'],
@@ -98,6 +101,18 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             [['id'], 'unique'],
             [['preferencias_id'], 'exist', 'skipOnError' => true, 'targetClass' => Preferencias::className(), 'targetAttribute' => ['preferencias_id' => 'id']],
             [['id'], 'exist', 'skipOnError' => true, 'targetClass' => UsuariosId::className(), 'targetAttribute' => ['id' => 'id']],
+            [['imagen'], 'file', 'extensions' => 'png, jpg'],
+            [
+                ['password', 'password_repeat'],
+                'required', 'on' => self::ESCENARIO_CREATE
+            ],
+            [
+                ['password_repeat'],
+                'compare',
+                'compareAttribute' => 'password',
+                'skipOnEmpty' => false,
+                'on' => [self::ESCENARIO_CREATE, self::ESCENARIO_UPDATE],
+            ],
         ];
     }
 
@@ -126,8 +141,10 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             'twitter' => 'Twitter',
             'preferencias_id' => 'Preferencias ID',
             'avatar' => 'Avatar',
+            'imagen' => 'Avatar',
         ];
     }
+
 
     /**
      * @return \yii\db\ActiveQuery
@@ -260,6 +277,32 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
             return true;
         }
         return false;
+    }
+
+    public function getRutaImagen()
+    {
+        $nombre = Yii::getAlias('@r_avatar/') . $this->avatar;
+        if (file_exists($nombre)) {
+            return Url::to('/r_avatar/') . $this->avatar;
+        }
+        return Url::to('/r_avatar/') . 'default.png';
+    }
+
+    /**
+     * Sube la imagen al directorio correspondiente y devuelve si fue posible.
+     * @return bool Indica si se lleva la acción
+     */
+    public function upload()
+    {
+        if ($this->imagen === null) {
+            return true;
+        }
+        $nombre = Yii::getAlias('@r_avatar/') .  $this->imagen->baseName . '.' . $this->imagen->extension;
+        $res = $this->imagen->saveAs($nombre);
+        if ($res) {
+            Image::thumbnail($nombre, 250, null)->save($nombre);
+        }
+        return $res;
     }
 
 

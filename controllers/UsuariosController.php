@@ -9,6 +9,8 @@
 
 namespace app\controllers;
 
+use app\models\UsuariosId;
+use function var_dump;
 use Yii;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
@@ -16,6 +18,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -84,10 +87,21 @@ class UsuariosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Usuarios();
+        $model = new Usuarios(['scenario' => Usuarios::ESCENARIO_CREATE]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // Creo un nuevo id para este usuarios desde "usuarios_id"
+        $usuario_id = new UsuariosId();
+
+        // Si entra mediante POST y puedo crear el usuario_id lo cargo al modelo
+        if ($model->load(Yii::$app->request->post()) && $usuario_id->save()) {
+            $model->id = $usuario_id->id;
+            $model->imagen = UploadedFile::getInstance($model, 'imagen');
+
+            if ($model->save() && $model->upload()) {
+                //$model->lo
+                Yii::$app->user->login($model);
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -105,6 +119,8 @@ class UsuariosController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = Usuarios::ESCENARIO_UPDATE;
+        $model->password = '';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -142,6 +158,8 @@ class UsuariosController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('No existe la página solicitada.');
     }
+
+
 }
