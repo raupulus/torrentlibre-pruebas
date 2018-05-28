@@ -4,6 +4,10 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 $log = require __DIR__ . '/log.php';
 
+// Consigo aquí la URL del dominio raíz
+$webroot = dirname(__DIR__) . '/www';
+$url = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
@@ -11,8 +15,12 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@r_avatar' => $url.$params['rutaAvatar'],
+        '@tmp' => '@app/'.$params['tmp'],
     ],
     'language' => 'es-ES',
+    'name' => 'Torrent Libre (beta)',
+    'sourceLanguage' => 'es-ES',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -22,7 +30,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\Usuarios',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [

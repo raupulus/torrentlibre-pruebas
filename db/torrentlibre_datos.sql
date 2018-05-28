@@ -4,9 +4,9 @@ CREATE EXTENSION pgcrypto;
 --                     Roles                     --
 ---------------------------------------------------
 INSERT INTO roles (tipo, descripcion) VALUES
-    ('admin', 'Administrador principal de la aplicación')
+    ('basic', 'Usuario básico logueado que puede subir torrents')
   , ('editor', 'Puede moderar, bloquear usuarios y ver estadísticas')
-  , ('basic', 'Usuario básico logueado que puede subir torrents')
+  , ('admin', 'Administrador principal de la aplicación')
 ;
 
 ---------------------------------------------------
@@ -28,10 +28,10 @@ INSERT INTO preferencias (tema_id) VALUES
 ---------------------------------------------------
 --                    Usuarios                   --
 ---------------------------------------------------
-INSERT INTO usuarios (rol_id,ip)
+INSERT INTO usuarios_id (rol_id,ip)
 VALUES
   (
-      1
+      3
     , '199.199.199.199'
   )
 
@@ -41,12 +41,12 @@ VALUES
 )
 
   , (
-      3
+      1
     , '199.199.199.201'
 )
 ;
 
-INSERT INTO usuarios_datos (
+INSERT INTO usuarios (
   id, nombre, web, localidad, provincia, direccion, telefono, biografia,
   fecha_nacimiento, geoloc, sexo, twitter, preferencias_id, password, email,
   nick, auth_key, token
@@ -55,8 +55,8 @@ INSERT INTO usuarios_datos (
       1
     , 'Administrador'
     , 'https://www.fryntiz.es'
-    , 'Cádiz'
     , 'Chipiona'
+    , 'Cádiz'
     , 'Calle Oculta'
     , '000000000'
     , 'Estudiando DAW'
@@ -76,8 +76,8 @@ INSERT INTO usuarios_datos (
       2
     , 'Editor'
     , 'https://www.fryntiz.es'
-    , 'Cádiz'
     , 'Chipiona'
+    , 'Cádiz'
     , 'Calle Oculta'
     , '000000001'
     , 'Estudiando DAW'
@@ -97,8 +97,8 @@ INSERT INTO usuarios_datos (
       3
     , 'Pepe'
     , 'https://www.fryntiz.es'
-    , 'Cádiz'
     , 'Chipiona'
+    , 'Cádiz'
     , 'Calle Oculta'
     , '000000002'
     , 'Estudiando DAW'

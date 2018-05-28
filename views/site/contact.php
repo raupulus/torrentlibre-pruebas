@@ -8,7 +8,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = 'Contact';
+$this->title = 'Contacto';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-contact">
@@ -17,7 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
 
         <div class="alert alert-success">
-            Thank you for contacting us. We will respond to you as soon as possible.
+            Gracias por contactar con nosotros, le responderemos lo antes
+            posible.
         </div>
 
         <p>
@@ -34,8 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php else: ?>
 
         <p>
-            If you have business inquiries or other questions, please fill out the following form to contact us.
-            Thank you.
+            Aún no es posible contactar por este medio, pero en su defecto
+            puede hacerlo desde el repositorio en GitHub donde se desarrolla
+            esta aplicación: <a href="https://github.com/fryntiz/torrentlibre" >https://github.com/fryntiz/torrentlibre</a>
         </p>
 
         <div class="row">

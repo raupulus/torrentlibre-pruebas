@@ -51,7 +51,7 @@ class Preferencias extends \yii\db\ActiveRecord
             'promociones' => 'Promociones',
             'noticias' => 'Noticias',
             'resumen' => 'Resumen',
-            'tour' => 'Tour',
+            'tour' => 'Tour inicial',
         ];
     }
 
@@ -68,6 +68,29 @@ class Preferencias extends \yii\db\ActiveRecord
      */
     public function getUsuariosDatos()
     {
-        return $this->hasMany(UsuariosDatos::className(), ['preferencias_id' => 'id']);
+        return $this->hasMany(Usuarios::className(), ['preferencias_id' => 'id']);
+    }
+
+
+    /* ETIQUETAS BOOLEAN PARA GRIDVIEW */
+
+    public function getPromocionesLabel()
+    {
+        return $this->promociones ? 'Si' : 'No';
+    }
+
+    public function getNoticiasLabel()
+    {
+        return $this->noticias ? 'Si' : 'No';
+    }
+
+    public function getResumenLabel()
+    {
+        return $this->resumen ? 'Si' : 'No';
+    }
+
+    public function getTourLabel()
+    {
+        return $this->tour ? 'Si' : 'No';
     }
 }

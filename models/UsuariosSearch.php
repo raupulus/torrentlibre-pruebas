@@ -18,8 +18,8 @@ class UsuariosSearch extends Usuarios
     public function rules()
     {
         return [
-            [['id', 'rol_id'], 'integer'],
-            [['created_at', 'updated_at', 'ip'], 'safe'],
+            [['id', 'preferencias_id'], 'integer'],
+            [['nombre', 'nick', 'email', 'password', 'auth_key', 'token', 'web', 'localidad', 'provincia', 'direccion', 'telefono', 'biografia', 'fecha_nacimiento', 'geoloc', 'sexo', 'twitter', 'avatar'], 'safe'],
         ];
     }
 
@@ -60,12 +60,26 @@ class UsuariosSearch extends Usuarios
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'rol_id' => $this->rol_id,
+            'fecha_nacimiento' => $this->fecha_nacimiento,
+            'preferencias_id' => $this->preferencias_id,
         ]);
 
-        $query->andFilterWhere(['ilike', 'ip', $this->ip]);
+        $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
+            ->andFilterWhere(['ilike', 'nick', $this->nick])
+            ->andFilterWhere(['ilike', 'email', $this->email])
+            ->andFilterWhere(['ilike', 'password', $this->password])
+            ->andFilterWhere(['ilike', 'auth_key', $this->auth_key])
+            ->andFilterWhere(['ilike', 'token', $this->token])
+            ->andFilterWhere(['ilike', 'web', $this->web])
+            ->andFilterWhere(['ilike', 'localidad', $this->localidad])
+            ->andFilterWhere(['ilike', 'provincia', $this->provincia])
+            ->andFilterWhere(['ilike', 'direccion', $this->direccion])
+            ->andFilterWhere(['ilike', 'telefono', $this->telefono])
+            ->andFilterWhere(['ilike', 'biografia', $this->biografia])
+            ->andFilterWhere(['ilike', 'geoloc', $this->geoloc])
+            ->andFilterWhere(['ilike', 'sexo', $this->sexo])
+            ->andFilterWhere(['ilike', 'twitter', $this->twitter])
+            ->andFilterWhere(['ilike', 'avatar', $this->avatar]);
 
         return $dataProvider;
     }

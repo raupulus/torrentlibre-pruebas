@@ -43,8 +43,8 @@ class Temas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nombre' => 'Nombre',
-            'descripcion' => 'Descripcion',
+            'nombre' => 'Tema',
+            'descripcion' => 'Descripción del tema',
         ];
     }
 
