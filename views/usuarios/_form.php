@@ -29,14 +29,15 @@ use yii\widgets\ActiveForm;
         <h3>Datos Básicos</h3>
         <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'nick')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'nick')->textInput([
+                'enableAjaxValidation' => true,
+                'maxlength' => true]) ?>
 
         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'password_repeat')->passwordInput(['maxlength'
-        => true]) ?>
+        <?= $form->field($model, 'password_repeat')->passwordInput(); ?>
     </div>
 
 

@@ -109,6 +109,20 @@ if (!Yii::$app->user->isGuest) {
             ],
         ]) ?>
 
+        <h3>Preferencias del usuario</h3>
+
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'preferencias.tema.nombre',
+                'preferencias.tema.descripcion',
+                'preferencias.promociones',
+                'preferencias.noticias',
+                'preferencias.resumen',
+                'preferencias.tour',
+            ],
+        ]) ?>
+
     <?php else: ?>
 
     <?= DetailView::widget([

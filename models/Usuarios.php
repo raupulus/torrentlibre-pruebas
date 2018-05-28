@@ -83,13 +83,21 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return 'usuarios';
     }
 
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+            'password_repeat',
+            'imagen',
+        ]);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'nick', 'email', 'password'], 'required'],
+            [['id', 'nick', 'email'], 'required'],
             [['id', 'preferencias_id'], 'default', 'value' => null],
             [['id', 'preferencias_id'], 'integer'],
             [['fecha_nacimiento'], 'safe'],
@@ -102,6 +110,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['preferencias_id'], 'exist', 'skipOnError' => true, 'targetClass' => Preferencias::className(), 'targetAttribute' => ['preferencias_id' => 'id']],
             [['id'], 'exist', 'skipOnError' => true, 'targetClass' => UsuariosId::className(), 'targetAttribute' => ['id' => 'id']],
             [['imagen'], 'file', 'extensions' => 'png, jpg'],
+            [['password'], 'string', 'max' => 255],
+            [['password_repeat'], 'string', 'max' => 255],
             [
                 ['password', 'password_repeat'],
                 'required', 'on' => self::ESCENARIO_CREATE
@@ -112,6 +122,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
                 'compareAttribute' => 'password',
                 'skipOnEmpty' => false,
                 'on' => [self::ESCENARIO_CREATE, self::ESCENARIO_UPDATE],
+                'message' => 'Deben coincidir las contraseñas.',
             ],
         ];
     }
@@ -126,7 +137,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'nombre' => 'Nombre',
             'nick' => 'Nick',
             'email' => 'Email',
-            'password' => 'Password',
+            'password' => 'Contraseña',
+            'password_repeat' => 'Confirmar contraseña',
             'auth_key' => 'Auth Key',
             'token' => 'Token',
             'web' => 'Web',
@@ -261,17 +273,19 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         if (parent::beforeSave($insert)) {
             if ($insert) {
+                $this->token = Yii::$app->security->generateRandomString();
                 $this->auth_key = Yii::$app->security->generateRandomString();
+
                 if ($this->scenario === self::ESCENARIO_CREATE) {
-                    $this->password = Yii::$app->security->generatePasswordHash($this->password);
+                    $this->password = Yii::$app->security
+                                      ->generatePasswordHash($this->password);
                 }
-            } else {
-                if ($this->scenario === self::ESCENARIO_UPDATE) {
-                    if ($this->password === '') {
-                        $this->password = $this->getOldAttribute('password');
-                    } else {
-                        $this->password = Yii::$app->security->generatePasswordHash($this->password);
-                    }
+            } elseif ($this->scenario === self::ESCENARIO_UPDATE) {
+                if ($this->password === '') {
+                    $this->password = $this->getOldAttribute('password');
+                } else {
+                    $this->password = Yii::$app->security
+                                      ->generatePasswordHash($this->password);
                 }
             }
             return true;
@@ -279,6 +293,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return false;
     }
 
+    /*
+     * Devuelve la ruta del avatar para el usuario actual.
+     * return String Ruta del avatar
+     */
     public function getRutaImagen()
     {
         $nombre = Yii::getAlias('@r_avatar/') . $this->avatar;
@@ -290,10 +308,13 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     /**
      * Sube la imagen al directorio correspondiente y devuelve si fue posible.
+     * El nombre se compone del "id-" del usuario seguido del nombre real de la
+     * imagen.
      * @return bool Indica si se lleva la acción
      */
     public function upload()
     {
+        // TODO → Comprobar si existe la imagen y borrarla antes de guardarla.
         if ($this->imagen === null) {
             return true;
         }

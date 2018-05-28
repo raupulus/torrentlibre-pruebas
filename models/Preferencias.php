@@ -51,7 +51,7 @@ class Preferencias extends \yii\db\ActiveRecord
             'promociones' => 'Promociones',
             'noticias' => 'Noticias',
             'resumen' => 'Resumen',
-            'tour' => 'Tour',
+            'tour' => 'Tour inicial',
         ];
     }
 

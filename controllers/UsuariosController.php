@@ -40,7 +40,7 @@ class UsuariosController extends Controller
 
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'delete'],
+                'only' => ['index', 'view', 'delete', 'update'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -122,11 +122,19 @@ class UsuariosController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id = 0)
     {
+        $rol = Yii::$app->user->identity->rol;
+
+        if ($rol !== 'admin') {
+            $id = Yii::$app->user->id;
+        }
+
         $model = $this->findModel($id);
+
         $model->scenario = Usuarios::ESCENARIO_UPDATE;
         $model->password = '';
+        $model->password_repeat = '';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -144,9 +152,17 @@ class UsuariosController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($id = 0)
     {
-        $this->findModel($id)->delete();
+        $rol = Yii::$app->user->identity->rol;
+
+        if ($rol === 'admin') {
+            $model = $this->findModel($id)->delete();
+        } else {
+            $model = Yii::$app->user->identity->delete();
+        }
+
+        //$this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
