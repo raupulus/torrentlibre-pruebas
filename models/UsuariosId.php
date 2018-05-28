@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\Informacion;
 use Yii;
 use yii\db\Expression;
 
@@ -87,5 +88,21 @@ class UsuariosId extends \yii\db\ActiveRecord
     public function getRol()
     {
         return $this->hasOne(Roles::className(), ['id' => 'rol_id']);
+    }
+
+    /**
+     * Acciones llevadas a cabo antes de insertar un usuario
+     * @param bool $insert Acción a realizar, si existe está insertando
+     * @return bool Devuelve un booleano, si se lleva a cabo es true.
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->ip = Informacion::usuarioIP();
+            }
+            return true;
+        }
+        return false;
     }
 }
