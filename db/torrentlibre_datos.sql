@@ -54,7 +54,7 @@ INSERT INTO usuarios (
   (
       1
     , 'Administrador'
-    , 'https://www.fryntiz.es'
+    , 'http://www.fryntiz.es'
     , 'Chipiona'
     , 'Cádiz'
     , 'Calle Oculta'
@@ -75,7 +75,7 @@ INSERT INTO usuarios (
   , (
       2
     , 'Editor'
-    , 'https://www.fryntiz.es'
+    , 'http://www.fryntiz.es'
     , 'Chipiona'
     , 'Cádiz'
     , 'Calle Oculta'
@@ -96,7 +96,7 @@ INSERT INTO usuarios (
   , (
       3
     , 'Pepe'
-    , 'https://www.fryntiz.es'
+    , 'http://www.fryntiz.es'
     , 'Chipiona'
     , 'Cádiz'
     , 'Calle Oculta'
