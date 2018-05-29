@@ -160,7 +160,8 @@ CREATE TABLE torrents (
   , descripcion     VARCHAR(500)
   , imagen          VARCHAR(255)
   , file            VARCHAR(255)  -- Archivo .torrent
-  , magnet          VARCHAR(255)  -- enlace magnet al torrent
+  , size            INTEGER       -- Tamaño ocupado en KB
+  , magnet          VARCHAR(255)  -- Enlace magnet al torrent
   , password        VARCHAR(255)  -- Contraseña para descomprimir el torrent
   , md5             VARCHAR(255)  -- Verificación del .torrent
   , n_descargas     BIGINT        -- Cantidad de veces descargado

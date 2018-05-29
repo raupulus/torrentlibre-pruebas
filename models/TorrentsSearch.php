@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Torrents;
 
 /**
- * TorrentsSearch represents the model behind the search form of `app\models\Torrents`.
+ * TorrentsSearch represents the model behind the search form of `\app\models\Torrents`.
  */
 class TorrentsSearch extends Torrents
 {
@@ -18,7 +18,7 @@ class TorrentsSearch extends Torrents
     public function rules()
     {
         return [
-            [['id', 'licencia_id', 'categoria_id', 'usuario_id', 'n_descargas'], 'integer'],
+            [['id', 'licencia_id', 'categoria_id', 'usuario_id', 'size', 'n_descargas'], 'integer'],
             [['titulo', 'resumen', 'descripcion', 'imagen', 'file', 'magnet', 'password', 'md5', 'created_at', 'updated_at'], 'safe'],
             [['online'], 'boolean'],
         ];
@@ -64,6 +64,7 @@ class TorrentsSearch extends Torrents
             'licencia_id' => $this->licencia_id,
             'categoria_id' => $this->categoria_id,
             'usuario_id' => $this->usuario_id,
+            'size' => $this->size,
             'n_descargas' => $this->n_descargas,
             'online' => $this->online,
             'created_at' => $this->created_at,

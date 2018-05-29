@@ -16,6 +16,7 @@ use Yii;
  * @property string $descripcion
  * @property string $imagen
  * @property string $file
+ * @property int $size
  * @property string $magnet
  * @property string $password
  * @property string $md5
@@ -50,8 +51,8 @@ class Torrents extends \yii\db\ActiveRecord
     {
         return [
             [['licencia_id', 'categoria_id', 'usuario_id', 'titulo', 'resumen'], 'required'],
-            [['licencia_id', 'categoria_id', 'usuario_id', 'n_descargas'], 'default', 'value' => null],
-            [['licencia_id', 'categoria_id', 'usuario_id', 'n_descargas'], 'integer'],
+            [['licencia_id', 'categoria_id', 'usuario_id', 'size', 'n_descargas'], 'default', 'value' => null],
+            [['licencia_id', 'categoria_id', 'usuario_id', 'size', 'n_descargas'], 'integer'],
             [['online'], 'boolean'],
             [['created_at', 'updated_at'], 'safe'],
             [['titulo', 'resumen', 'imagen', 'file', 'magnet', 'password', 'md5'], 'string', 'max' => 255],
@@ -77,6 +78,7 @@ class Torrents extends \yii\db\ActiveRecord
             'descripcion' => 'Descripcion',
             'imagen' => 'Imagen',
             'file' => 'File',
+            'size' => 'Size',
             'magnet' => 'Magnet',
             'password' => 'Password',
             'md5' => 'Md5',
