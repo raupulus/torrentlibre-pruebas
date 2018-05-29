@@ -6,4 +6,5 @@ return [
     'rutaTorrent' => '',
     'rutaImagenTorrent' => 'images/torrent-image',
     'tmp' => 'tmp',
+    'paginacion_torrents' => 6,
 ];

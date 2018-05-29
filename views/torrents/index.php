@@ -26,14 +26,17 @@ TorrentsIndexAsset::register($this);
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'class' => 'grid-view',
+        'showHeader' => false,
+        //'showFooter' => false,
+        'emptyCell' => 'N/D',  // Cuando no hay datos se muestra esto
         'tableOptions' => [
-            'class' => 'tablaTorrentsIndex'
+            'class' => 'tablaTorrentsIndex',
         ],
-        'filterRowOptions' => [
-            'class' => 'trSearch'
-        ],
+        //'filterRowOptions' => [
+        //    'class' => 'trSearch'
+        //],
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
 
@@ -103,6 +106,18 @@ TorrentsIndexAsset::register($this);
                 'attribute' => 'online',
                 'format' => 'boolean',
                 'contentOptions' => ['class' => 'tabla-online'],
+            ],
+
+            [
+                'label' => 'Ficha del Torrent',
+                'format' => 'raw',
+                'contentOptions' => ['class' => 'tabla-vertorrent'],
+                'value' => function($model) {
+                    return Html::a('Ir a la ficha del Torrent', [
+                        Url::to('torrents/view'),
+                        'id' => $model->id
+                    ]);
+                }
             ],
 
             //'descripcion',

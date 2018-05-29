@@ -48,6 +48,7 @@ class TorrentsSearch extends Torrents
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => ['pageSize' => Yii::getAlias('@p_torrents')],
         ]);
 
         $this->load($params);

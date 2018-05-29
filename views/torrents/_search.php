@@ -15,13 +15,13 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php // $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'licencia_id') ?>
+    <?php // $form->field($model, 'licencia_id') ?>
 
-    <?= $form->field($model, 'categoria_id') ?>
+    <?php // $form->field($model, 'categoria_id') ?>
 
-    <?= $form->field($model, 'usuario_id') ?>
+    <?php // $form->field($model, 'usuario_id') ?>
 
     <?= $form->field($model, 'titulo') ?>
 
@@ -41,7 +41,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'md5') ?>
 
-    <?php // echo $form->field($model, 'n_descargas') ?>
+    <?= $form->field($model, 'n_descargas') ?>
 
     <?php // echo $form->field($model, 'online')->checkbox() ?>
 

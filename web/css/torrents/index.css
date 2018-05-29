@@ -59,14 +59,14 @@
 /* TITULO */
 .grid-view .tablaTorrentsIndex .tabla-titulo {
     width: 100%;
-    background-color: red;
+    border-radius: 10px 10px 0 0;
+    background-color: #0e2231;
 }
 
 .grid-view .tablaTorrentsIndex .tabla-titulo a {
     width: 100%;
     color: white;
     font-weight: bolder;
-    background-color: red;
 }
 
 

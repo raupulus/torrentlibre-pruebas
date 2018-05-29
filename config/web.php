@@ -18,6 +18,7 @@ $config = [
         '@r_avatar' => $url.$params['rutaAvatar'],
         '@r_imgTorrent' => $url.$params['rutaImagenTorrent'],
         '@tmp' => '@app/'.$params['tmp'],
+        '@p_torrents' => $params['paginacion_torrents'],
     ],
     'language' => 'es-ES',
     'name' => 'Torrent Libre (beta)',
