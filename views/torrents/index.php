@@ -40,6 +40,8 @@ TorrentsIndexAsset::register($this);
             [
                 'attribute' => 'titulo',
                 'format' => 'raw',
+                'contentOptions' => ['class' => 'tabla-titulo'],
+                //'headerOptions' => ['class' => 'titulo2'],
                 'value' => function($model) {
                     return Html::a($model->titulo, [
                         Url::to('torrents/view'),
@@ -51,6 +53,7 @@ TorrentsIndexAsset::register($this);
             [
                 'attribute' => 'imagen',
                 'format' => 'raw',
+                'contentOptions' => ['class' => 'tabla-imagen'],
                 'value' => function($model, $key, $index) {
                     $img = $model->imagen;
                     $ruta = yii::getAlias('@r_imgTorrent').'/';
@@ -68,13 +71,23 @@ TorrentsIndexAsset::register($this);
                     return $link;
                 }
             ],
-            'resumen',
-            'licencia.tipo',
-            'categoria.nombre',
+            [
+                'attribute' => 'resumen',
+                'contentOptions' => ['class' => 'tabla-resumen'],
+            ],
+            [
+                'attribute' => 'licencia.tipo',
+                'contentOptions' => ['class' => 'tabla-licencia'],
+            ],
+            [
+                'attribute' => 'categoria.nombre',
+                'contentOptions' => ['class' => 'tabla-categoria'],
+            ],
 
             [
                 'attribute' => 'usuario.nick',
                 'format' => 'raw',
+                'contentOptions' => ['class' => 'tabla-nick'],
                 'value' => function($model) {
                     return Html::a($model->usuario->nick, [
                         Url::to('usuarios/view'),
@@ -82,14 +95,22 @@ TorrentsIndexAsset::register($this);
                     ]);
                 }
             ],
+            [
+                'attribute' => 'n_descargas',
+                'contentOptions' => ['class' => 'tabla-n_descargas'],
+            ],
+            [
+                'attribute' => 'online',
+                'format' => 'boolean',
+                'contentOptions' => ['class' => 'tabla-online'],
+            ],
+
             //'descripcion',
             //'file',
             //'size',
             //'magnet',
             //'password',
             //'md5',
-            'n_descargas',
-            'online:boolean',
             //'created_at',
             //'updated_at',
 

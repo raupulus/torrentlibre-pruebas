@@ -5,11 +5,12 @@
  * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
  */
 
+
+/*****************************************
+ *               Gridview                *
+ *****************************************/
 .grid-view {
     margin: 25px 5px;
-    border: 8px solid #f5e79e;
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px black;
 }
 
 .grid-view .trSearch {
@@ -36,4 +37,64 @@
     padding: 5px;
     text-align: center;
     vertical-align: middle;
+}
+
+/*****************************************
+ *  Cada celda de una fila en la tabla   *
+ *****************************************/
+.grid-view .tablaTorrentsIndex tr {
+    margin: 40px 0;
+    width: 100%;
+    display: block;
+    border: 3px solid #f5e79e;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px black;
+}
+
+.grid-view .tablaTorrentsIndex td {
+    display: inline-block;
+}
+
+
+/* TITULO */
+.grid-view .tablaTorrentsIndex .tabla-titulo {
+    width: 100%;
+    background-color: red;
+}
+
+.grid-view .tablaTorrentsIndex .tabla-titulo a {
+    width: 100%;
+    color: white;
+    font-weight: bolder;
+    background-color: red;
+}
+
+
+/* IMAGEN */
+.grid-view .tablaTorrentsIndex .tabla-imagen {
+    width: 40%;
+}
+
+.grid-view .tablaTorrentsIndex .tabla-resumen {
+    width: 60%;
+}
+
+.grid-view .tablaTorrentsIndex .tabla-licencia {
+
+}
+
+.grid-view .tablaTorrentsIndex .tabla-categoria {
+
+}
+
+.grid-view .tablaTorrentsIndex .tabla-nick {
+
+}
+
+.grid-view .tablaTorrentsIndex .tabla-n_descargas {
+
+}
+
+.grid-view .tablaTorrentsIndex .tabla-online {
+
 }
