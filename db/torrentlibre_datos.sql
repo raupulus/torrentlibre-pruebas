@@ -127,8 +127,8 @@ INSERT INTO usuarios (
 --                  Licencias                    --
 ---------------------------------------------------
 INSERT INTO licencias (tipo, url, imagen) VALUES
-    ('GPL3', 'https://www.gnu.org/licenses/gpl-3.0.html', 'gpl3.png')
-  , ('BSD3', 'https://opensource.org/licenses/BSD-3-Clause', 'bsd3.png')
+    ('GPLv3', 'https://www.gnu.org/licenses/gpl-3.0.html', 'gpl3.png')
+  , ('BSD-3', 'https://opensource.org/licenses/BSD-3-Clause', 'bsd3.png')
 ;
 
 

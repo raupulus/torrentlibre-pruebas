@@ -4,3 +4,36 @@
  * @copyright Copyright © 2017 Raúl Caro Pastorino
  * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
  */
+
+.grid-view {
+    margin: 25px 5px;
+    border: 8px solid #f5e79e;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px black;
+}
+
+.grid-view .trSearch {
+
+}
+
+.grid-view .trSearch td {
+    background-color: white;
+}
+
+.grid-view .tablaTorrentsIndex {
+    width: 100%;
+}
+
+.grid-view .tablaTorrentsIndex  tr {
+    border-top: 1px solid #000000;
+}
+
+.grid-view .tablaTorrentsIndex tr td img {
+    width: 250px;
+}
+
+.grid-view .tablaTorrentsIndex th, .grid-view .tablaTorrentsIndex td {
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+}

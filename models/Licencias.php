@@ -44,7 +44,7 @@ class Licencias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'tipo' => 'Tipo',
+            'tipo' => 'Licencia',
             'url' => 'Url',
             'imagen' => 'Imagen',
         ];

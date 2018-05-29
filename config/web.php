@@ -16,6 +16,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@r_avatar' => $url.$params['rutaAvatar'],
+        '@r_imgTorrent' => $url.$params['rutaImagenTorrent'],
         '@tmp' => '@app/'.$params['tmp'],
     ],
     'language' => 'es-ES',

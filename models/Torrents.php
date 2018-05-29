@@ -152,4 +152,11 @@ class Torrents extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id']);
     }
+
+    /* ETIQUETAS BOOLEAN PARA GRIDVIEW */
+    public function getOnlineLabel() {
+        return $this->online ? 'Online' : 'Caido'; //? 'Si' : 'No';
+    }
+
+
 }

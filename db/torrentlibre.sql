@@ -164,7 +164,7 @@ CREATE TABLE torrents (
   , magnet          VARCHAR(255)  -- Enlace magnet al torrent
   , password        VARCHAR(255)  -- Contraseña para descomprimir el torrent
   , md5             VARCHAR(255)  -- Verificación del .torrent
-  , n_descargas     BIGINT        -- Cantidad de veces descargado
+  , n_descargas     BIGINT        DEFAULT 0  -- Cantidad de veces descargado
   , online          BOOLEAN       DEFAULT TRUE -- Indica si es válido
   --, modificar       BOOLEAN  -- Indica si han solicitado modificación
   , created_at      TIMESTAMP(0)  DEFAULT LOCALTIMESTAMP
