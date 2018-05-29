@@ -4,9 +4,16 @@ CREATE EXTENSION pgcrypto;
 --                     Roles                     --
 ---------------------------------------------------
 INSERT INTO roles (tipo, descripcion) VALUES
-    ('basic', 'Usuario básico logueado que puede subir torrents')
+    ('test', 'Cuenta recién creada, solo puede rellenar el perfil y ver ' ||
+              'usuarios')
   , ('editor', 'Puede moderar, bloquear usuarios y ver estadísticas')
   , ('admin', 'Administrador principal de la aplicación')
+  , ('especial', 'Designado manualmente por el administrador para colaborar ' ||
+                 'en la administración o moderación del sitio')
+  , ('novato', 'Cuenta recién creada pero ha verificado su perfil')
+  , ('geekv1', 'Ha publicado al menos 10 torrents')
+  , ('geekv2', 'Ha publicado al menos 50 torrents')
+  , ('geekv3', 'Ha publicado al menos 100 torrents')
 ;
 
 ---------------------------------------------------
@@ -129,8 +136,17 @@ INSERT INTO licencias (tipo, url, imagen) VALUES
 --                  CATEGORÍAS                   --
 ---------------------------------------------------
 INSERT INTO categorias (nombre) VALUES
-    ('Máquina virtual')
-  , ('Libro')
+    ('Máquinas Virtuales')
+  , ('Libros')
+  , ('Podcasts')
+  , ('Apuntes')
+  , ('Vídeos')
+  , ('PDF')
+  , ('Otros')
+  , ('Imágenes')
+  , ('Cheat Sheet')
+  , ('Scripts')
+  , ('Sistemas Operativos')
 ;
 
 ---------------------------------------------------

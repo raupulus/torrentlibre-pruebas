@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Torrents */
+/* @var $model app\models\UsuariosBloqueados */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Usuarios Bloqueados', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="torrents-view">
+<div class="usuarios-bloqueados-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,22 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'licencia_id',
-            'categoria_id',
             'usuario_id',
-            'titulo',
-            'resumen',
-            'descripcion',
-            'imagen',
-            'file',
-            'size',
-            'magnet',
-            'password',
-            'md5',
-            'n_descargas',
-            'online:boolean',
             'created_at',
-            'updated_at',
         ],
     ]) ?>
 

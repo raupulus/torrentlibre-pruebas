@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Torrents */
+/* @var $model app\models\Preferencias */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Preferencias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="torrents-view">
+<div class="preferencias-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -29,22 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'licencia_id',
-            'categoria_id',
-            'usuario_id',
-            'titulo',
-            'resumen',
-            'descripcion',
-            'imagen',
-            'file',
-            'size',
-            'magnet',
-            'password',
-            'md5',
-            'n_descargas',
-            'online:boolean',
-            'created_at',
-            'updated_at',
+            'tema_id',
+            'promociones:boolean',
+            'noticias:boolean',
+            'resumen:boolean',
+            'tour:boolean',
         ],
     ]) ?>
 

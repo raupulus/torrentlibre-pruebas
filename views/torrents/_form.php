@@ -28,6 +28,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'file')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'size')->textInput() ?>
+
     <?= $form->field($model, 'magnet')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>

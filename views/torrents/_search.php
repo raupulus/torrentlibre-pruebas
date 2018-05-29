@@ -33,6 +33,8 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'file') ?>
 
+    <?php // echo $form->field($model, 'size') ?>
+
     <?php // echo $form->field($model, 'magnet') ?>
 
     <?php // echo $form->field($model, 'password') ?>

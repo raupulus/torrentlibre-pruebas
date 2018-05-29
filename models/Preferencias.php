@@ -15,7 +15,7 @@ use Yii;
  * @property bool $tour
  *
  * @property Temas $tema
- * @property UsuariosDatos[] $usuariosDatos
+ * @property Usuarios $usuarios
  */
 class Preferencias extends \yii\db\ActiveRecord
 {
@@ -66,7 +66,7 @@ class Preferencias extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUsuariosDatos()
+    public function getUsuarios()
     {
         return $this->hasMany(Usuarios::className(), ['preferencias_id' => 'id']);
     }
