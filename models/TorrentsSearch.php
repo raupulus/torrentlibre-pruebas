@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author Raúl Caro Pastorino
+ * @link http://www.fryntiz.es
+ * @copyright Copyright (c) 2018 Raúl Caro Pastorino
+ * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
+**/
 
 namespace app\models;
 
@@ -59,7 +65,7 @@ class TorrentsSearch extends Torrents
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        // Condiciones de filtrado en el Grid
         $query->andFilterWhere([
             'id' => $this->id,
             'licencia_id' => $this->licencia_id,
@@ -75,11 +81,7 @@ class TorrentsSearch extends Torrents
         $query->andFilterWhere(['ilike', 'titulo', $this->titulo])
             ->andFilterWhere(['ilike', 'resumen', $this->resumen])
             ->andFilterWhere(['ilike', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['ilike', 'imagen', $this->imagen])
-            ->andFilterWhere(['ilike', 'file', $this->file])
-            ->andFilterWhere(['ilike', 'magnet', $this->magnet])
-            ->andFilterWhere(['ilike', 'password', $this->password])
-            ->andFilterWhere(['ilike', 'md5', $this->md5]);
+            ;
 
         return $dataProvider;
     }
