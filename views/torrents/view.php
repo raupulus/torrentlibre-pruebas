@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Torrents */
 
-$this->title = $model->id;
+$this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,38 +14,66 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'licencia_id',
-            'categoria_id',
-            'usuario_id',
+            //'id',
             'titulo',
+            [
+                'attribute' => 'imagen',
+                'format' => 'raw',
+                'value' => function($model) {
+                    $img = $model->imagen;
+                    $ruta = yii::getAlias('@r_imgTorrent').'/';
+
+                    if ((! isset($img)) || (! file_exists($ruta.$img))) {
+                        $img = 'default.png';
+                    }
+
+                    return '<img src="'.$ruta.$img.'" />';
+                }
+            ],
             'resumen',
+            'licencia.tipo',
+            'categoria.nombre',
+            'usuario.nick',
             'descripcion',
-            'imagen',
-            'file',
+            [
+                'attribute' => 'file',
+                'format' => 'raw',
+                'value' => function($model) {
+                    $file = $model->file;
+                    $ruta = yii::getAlias('@r_torrent').'/';
+
+                    if ((! isset($file)) || (! file_exists($ruta.$file))) {
+                        return 'Archivo torrent no encontrado';
+                    }
+
+                    return HTML::a('Descargar', $ruta . $file, [
+                        'class' => 'btn btn-success btn-descargar',
+                    ]);
+                }
+            ],
             'size',
             'magnet',
             'password',
             'md5',
             'n_descargas',
             'online:boolean',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
+
+    <p>
+        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => '¿Seguro que quieres eliminar este torrent?',
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
 </div>
