@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Categorias;
 use app\models\Licencias;
 use function array_combine;
+use function var_dump;
 use Yii;
 use app\models\Torrents;
 use app\models\TorrentsSearch;
@@ -93,7 +94,7 @@ class TorrentsController extends Controller
         // En el caso de existir datos mediante POST los proceso
         if ($model->load(Yii::$app->request->post())) {
             $model->u_img = UploadedFile::getInstance($model, 'u_img');
-            $model->u_torrent = UploadedFile::getInstance($model, 'imagen');
+            $model->u_torrent = UploadedFile::getInstance($model, 'u_torrent');
 
             if ($model->u_img !== null) {
                 $model->imagen = $model->id . '-' .
@@ -105,6 +106,8 @@ class TorrentsController extends Controller
                 $model->file = $model->id . '-' .
                     $model->u_torrent->baseName . '.' .
                     $model->u_torrent->extension;
+
+                $model->size = $model->u_torrent->size;
             }
 
             if ($model->save() &&

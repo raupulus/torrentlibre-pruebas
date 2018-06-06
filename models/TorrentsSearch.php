@@ -67,11 +67,11 @@ class TorrentsSearch extends Torrents
 
         // Condiciones de filtrado en el Grid
         $query->andFilterWhere([
-            'id' => $this->id,
+            //'id' => $this->id,
             'licencia_id' => $this->licencia_id,
             'categoria_id' => $this->categoria_id,
             'usuario_id' => $this->usuario_id,
-            'size' => $this->size,
+            //'size' => $this->size,
             'n_descargas' => $this->n_descargas,
             'online' => $this->online,
             'created_at' => $this->created_at,
