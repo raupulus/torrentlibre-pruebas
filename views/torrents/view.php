@@ -9,6 +9,8 @@ use yii\widgets\DetailView;
 $this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+var_dump($model);
 ?>
 <div class="torrents-view">
 
@@ -43,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model) {
                     $file = $model->file;
-                    $ruta = yii::getAlias('@r_torrent').'/';
+                    $ruta = yii::getAlias('@r_torrents').'/';
 
                     if ((! isset($file)) || (! file_exists($ruta.$file))) {
                         return 'Archivo torrent no encontrado';

@@ -12,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * TorrentsController implements the CRUD actions for Torrents model.
@@ -83,8 +84,35 @@ class TorrentsController extends Controller
             'usuario_id' => Yii::$app->user->identity->id,
         ]);
 
+        /*
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+        }
+        */
+
+        // En el caso de existir datos mediante POST los proceso
+        if ($model->load(Yii::$app->request->post())) {
+            $model->u_img = UploadedFile::getInstance($model, 'u_img');
+            $model->u_torrent = UploadedFile::getInstance($model, 'imagen');
+
+            if ($model->u_img !== null) {
+                $model->imagen = $model->id . '-' .
+                    $model->u_img->baseName . '.' .
+                    $model->u_img->extension;
+            }
+
+            if ($model->u_torrent !== null) {
+                $model->file = $model->id . '-' .
+                    $model->u_torrent->baseName . '.' .
+                    $model->u_torrent->extension;
+            }
+
+            if ($model->save() &&
+                $model->uploadImg() &&
+                $model->uploadTorrent())
+            {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         $q_licencias = Licencias::find();

@@ -17,7 +17,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
         '@r_avatar' => $url.$params['rutaAvatar'],
         '@r_imgTorrent' => $url.$params['rutaImagenTorrent'],
-        '@r_torrent' => $url.$params['rutaTorrent'],
+        '@r_torrents' => $url.$params['rutaTorrent'],
         '@p_torrents' => $params['paginacion_torrents'],
         '@tmp' => '@app/'.$params['tmp'],
     ],

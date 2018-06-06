@@ -84,14 +84,6 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return 'usuarios';
     }
 
-    public function attributes()
-    {
-        return array_merge(parent::attributes(), [
-            'password_repeat',
-            'imagen',
-        ]);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -130,6 +122,18 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     /**
      * {@inheritdoc}
+     * @return array
+     */
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+            'password_repeat',
+            'imagen',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -157,7 +161,6 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'imagen' => 'Avatar',
         ];
     }
-
 
     /**
      * @return \yii\db\ActiveQuery

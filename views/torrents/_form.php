@@ -22,28 +22,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'imagen')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'u_img')->fileInput() ?>
 
-    <?= $form->field($model, 'file')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'size')->textInput() ?>
-
-    <?= $form->field($model, 'magnet')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'u_torrent')->fileInput() ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'md5')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'n_descargas')->textInput() ?>
-
-    <?= $form->field($model, 'online')->checkbox() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Subir', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

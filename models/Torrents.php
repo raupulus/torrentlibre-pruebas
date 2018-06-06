@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\imagine\Image;
 
 /**
  * This is the model class for table "torrents".
@@ -37,6 +38,19 @@ use Yii;
 class Torrents extends \yii\db\ActiveRecord
 {
     /**
+     * Imagen subida mediante el formulario.
+     * @var \yii\web\UploadedFile
+     */
+    public $u_img;
+
+    /**
+     * Archivo torrent subido mediante el formulario.
+     * @var \yii\web\UploadedFile
+     *
+     */
+    public $u_torrent;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -60,7 +74,21 @@ class Torrents extends \yii\db\ActiveRecord
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::className(), 'targetAttribute' => ['categoria_id' => 'id']],
             [['licencia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Licencias::className(), 'targetAttribute' => ['licencia_id' => 'id']],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
+            [['u_img'], 'file', 'extensions' => 'png, jpg'],
+            [['u_torrent'], 'file', 'extensions' => 'torrent'],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return array
+     */
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+            'u_img',
+            'u_torrent',
+        ]);
     }
 
     /**
@@ -80,13 +108,56 @@ class Torrents extends \yii\db\ActiveRecord
             'file' => 'File',
             'size' => 'Size',
             'magnet' => 'Magnet',
-            'password' => 'Password',
+            'password' => 'Contraseña para Descomprimir',
             'md5' => 'Md5',
             'n_descargas' => 'N Descargas',
             'online' => 'Online',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'u_img' => 'Imagen Portada',
+            'u_torrent' => 'Archivo Torrent',
         ];
+    }
+
+    /**
+     * Sube la imagen al directorio correspondiente y devuelve si fue posible.
+     * El nombre se compone del "id-" seguido del nombre real de la imagen.
+     * @return bool Indica si se lleva la acción
+     */
+    public function uploadImg()
+    {
+        // TODO → Comprobar si existe la imagen y borrarla antes de guardarla.
+        if ($this->u_img === null) {
+            return true;
+        }
+        $nombre = Yii::getAlias('@r_imgTorrent/') .
+            $this->id . '-' .
+            $this->u_img->baseName . '.' .
+            $this->u_img->extension;
+        $res = $this->u_img->saveAs($nombre);
+        if ($res) {
+            Image::thumbnail($nombre, 250, null)->save($nombre);
+        }
+        return $res;
+    }
+
+    /**
+     * Sube la imagen al directorio correspondiente y devuelve si fue posible.
+     * El nombre se compone del "id-" seguido del nombre real de la imagen.
+     * @return bool Indica si se lleva la acción
+     */
+    public function uploadTorrent()
+    {
+        // TODO → Comprobar si existe el torrent y borrarlo antes de guardarla.
+        if ($this->u_torrent === null) {
+            return true;
+        }
+        $nombre = Yii::getAlias('@r_torrents/') .
+            $this->id . '-' .
+            $this->u_torrent->baseName . '.' .
+            $this->u_torrent->extension;
+        $res = $this->u_torrent->saveAs($nombre);
+        return $res;
     }
 
     /**
@@ -157,6 +228,4 @@ class Torrents extends \yii\db\ActiveRecord
     public function getOnlineLabel() {
         return $this->online ? 'Online' : 'Caido'; //? 'Si' : 'No';
     }
-
-
 }
