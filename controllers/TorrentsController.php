@@ -2,9 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Categorias;
+use app\models\Licencias;
+use function array_combine;
 use Yii;
 use app\models\Torrents;
 use app\models\TorrentsSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -24,6 +28,17 @@ class TorrentsController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'delete', 'update'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -64,14 +79,31 @@ class TorrentsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Torrents();
+        $model = new Torrents([
+            'usuario_id' => Yii::$app->user->identity->id,
+        ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $q_licencias = Licencias::find();
+        $q_categorias = Categorias::find();
+
+        $licencias = array_combine(
+            $q_licencias->select('id')->column(),
+            $q_licencias->select('tipo')->column()
+        );
+
+        $categorias = array_combine(
+            $q_categorias->select('id')->column(),
+            $q_categorias->select('nombre')->column()
+        );
+
         return $this->render('create', [
             'model' => $model,
+            'licencias' => $licencias,
+            'categorias' => $categorias,
         ]);
     }
 
