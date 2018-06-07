@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use function md5_file;
 use Yii;
 use yii\imagine\Image;
 
@@ -165,6 +166,7 @@ class Torrents extends \yii\db\ActiveRecord
 
         $this->size = $this->u_torrent->size;
         $this->file = $nombre;
+        $this->md5 = md5_file($this->u_torrent->tempName);
 
         $rutaSave = Yii::getAlias('@r_torrents/') . $nombre;
         $res = $this->u_torrent->saveAs($rutaSave);

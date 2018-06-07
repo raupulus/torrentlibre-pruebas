@@ -38,7 +38,7 @@ var_dump($model);
             'resumen',
             'licencia.tipo',
             'categoria.nombre',
-            'usuario.nick',
+            'usuario.nick:text:Uploader',
             'descripcion',
             [
                 'attribute' => 'file',
