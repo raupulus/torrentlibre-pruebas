@@ -56,7 +56,7 @@ var_dump($model);
                     ]);
                 }
             ],
-            'size',
+            'size:shortSize',
             'magnet',
             'password',
             'md5',

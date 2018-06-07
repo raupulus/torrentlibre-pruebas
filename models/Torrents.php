@@ -75,7 +75,7 @@ class Torrents extends \yii\db\ActiveRecord
             [['licencia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Licencias::className(), 'targetAttribute' => ['licencia_id' => 'id']],
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
             [['u_img'], 'file', 'extensions' => 'png, jpg'],
-            [['u_torrent'], 'file', 'extensions' => 'torrent'],
+            [['u_torrent'], 'file', 'skipOnEmpty' => 'false'],
         ];
     }
 
@@ -148,15 +148,26 @@ class Torrents extends \yii\db\ActiveRecord
      */
     public function uploadTorrent()
     {
-        // TODO → Comprobar si existe el torrent y borrarlo antes de guardarla.
+        // Es obligatorio subir un torrent
         if ($this->u_torrent === null) {
-            return true;
+            Yii::$app->session->setFlash('error', 'Es obligatorio el archivo torrent');
+            return false;
         }
-        $nombre = Yii::getAlias('@r_torrents/') .
-            $this->id . '-' .
-            $this->u_torrent->baseName . '.' .
-            $this->u_torrent->extension;
-        $res = $this->u_torrent->saveAs($nombre);
+
+        // En caso de no tener extensión torrent se sale con error
+        if ($this->u_torrent->extension !== 'torrent') {
+            Yii::$app->session->setFlash('error', 'Archivo torrent no válido');
+            return false;
+        }
+
+        $nombre = $this->u_torrent->baseName . '.' .
+                  $this->u_torrent->extension;
+
+        $this->size = $this->u_torrent->size;
+        $this->file = $nombre;
+
+        $rutaSave = Yii::getAlias('@r_torrents/') . $nombre;
+        $res = $this->u_torrent->saveAs($rutaSave);
         return $res;
     }
 

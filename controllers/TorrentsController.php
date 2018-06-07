@@ -85,12 +85,6 @@ class TorrentsController extends Controller
             'usuario_id' => Yii::$app->user->identity->id,
         ]);
 
-        /*
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-        */
-
         // En el caso de existir datos mediante POST los proceso
         if ($model->load(Yii::$app->request->post())) {
             $model->u_img = UploadedFile::getInstance($model, 'u_img');
@@ -102,17 +96,10 @@ class TorrentsController extends Controller
                     $model->u_img->extension;
             }
 
-            if ($model->u_torrent !== null) {
-                $model->file = $model->id . '-' .
-                    $model->u_torrent->baseName . '.' .
-                    $model->u_torrent->extension;
-
-                $model->size = $model->u_torrent->size;
-            }
-
-            if ($model->save() &&
+            if (
                 $model->uploadImg() &&
-                $model->uploadTorrent())
+                $model->uploadTorrent() &&
+                $model->save())
             {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
