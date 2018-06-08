@@ -1,5 +1,6 @@
 <?php
 
+use app\assets\TorrentsViewAsset;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -9,6 +10,9 @@ use yii\widgets\DetailView;
 $this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+// Registro assets para esta vista
+TorrentsViewAsset::register($this);
 ?>
 <div class="torrents-view">
 
