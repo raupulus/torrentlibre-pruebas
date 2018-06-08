@@ -21,8 +21,8 @@ TorrentsIndexAsset::register($this);
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?php // Html::a('Create Torrents', ['create'], ['class' => 'btn
-    // btn-success']) ?>
+    <?= Html::a('Añadir un torrent', ['create'], ['class' => 'btn 
+    btn-primary']) ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

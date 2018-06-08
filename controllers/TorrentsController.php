@@ -87,7 +87,7 @@ class TorrentsController extends Controller
         ]);
 
         // En el caso de existir datos mediante POST los proceso
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->u_img = UploadedFile::getInstance($model, 'u_img');
             $model->u_torrent = UploadedFile::getInstance($model, 'u_torrent');
 
@@ -112,21 +112,15 @@ class TorrentsController extends Controller
                 {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
+            } else {
+                Yii::$app->session->setFlash('error', 'Es obligatorio el archivo torrent');
+                $model->addError('u_torrent',
+                    'Es obligatorio agregar un Torrent válido');
             }
         }
 
-        $q_licencias = Licencias::find();
-        $q_categorias = Categorias::find();
-
-        $licencias = array_combine(
-            $q_licencias->select('id')->column(),
-            $q_licencias->select('tipo')->column()
-        );
-
-        $categorias = array_combine(
-            $q_categorias->select('id')->column(),
-            $q_categorias->select('nombre')->column()
-        );
+        $licencias = Licencias::getAll();
+        $categorias = Categorias::getAll();
 
         return $this->render('create', [
             'model' => $model,
@@ -150,18 +144,8 @@ class TorrentsController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $q_licencias = Licencias::find();
-        $q_categorias = Categorias::find();
-
-        $licencias = array_combine(
-            $q_licencias->select('id')->column(),
-            $q_licencias->select('tipo')->column()
-        );
-
-        $categorias = array_combine(
-            $q_categorias->select('id')->column(),
-            $q_categorias->select('nombre')->column()
-        );
+        $licencias = Licencias::getAll();
+        $categorias = Categorias::getAll();
 
         return $this->render('update', [
             'model' => $model,
@@ -197,6 +181,17 @@ class TorrentsController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La página solicitada no existe.');
+    }
+
+    public function actionAumentarDescargas($id)
+    {
+        $model = $this->findModel($id);
+        $model->scenario = $model::ESCENARIO_UPDATE;
+        $model->n_descargas += 1;
+
+        if (Yii::$app->request->isPost) {
+            return $model->save();
+        }
     }
 }

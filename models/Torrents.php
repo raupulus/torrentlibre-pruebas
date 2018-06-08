@@ -88,7 +88,10 @@ class Torrents extends \yii\db\ActiveRecord
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
             [['u_img'], 'file', 'extensions' => 'png, jpg'],
             [['u_torrent'], 'file', 'extensions' => 'torrent'],
-            [['u_torrent'], 'required', 'on' => self::ESCENARIO_CREATE],
+            [
+                ['u_torrent'], 'required', 'on' => self::ESCENARIO_CREATE,
+                'message' => 'Es obligatorio agregar un Torrent válido'
+            ],
         ];
     }
 
@@ -210,6 +213,13 @@ class Torrents extends \yii\db\ActiveRecord
         $res = $this->u_torrent->saveAs($rutaSave);
         return $res;
     }
+
+    /*
+    public function aumentarDescargas()
+    {
+        return
+    }
+    */
 
     /**
      * @return \yii\db\ActiveQuery
