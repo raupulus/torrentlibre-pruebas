@@ -83,6 +83,7 @@ class TorrentsController extends Controller
     {
         $model = new Torrents([
             'usuario_id' => Yii::$app->user->identity->id,
+            'n_descargas' => 0,
         ]);
 
         // En el caso de existir datos mediante POST los proceso
@@ -90,18 +91,27 @@ class TorrentsController extends Controller
             $model->u_img = UploadedFile::getInstance($model, 'u_img');
             $model->u_torrent = UploadedFile::getInstance($model, 'u_torrent');
 
-            if ($model->u_img !== null) {
-                $model->imagen = $model->id . '-' .
-                    $model->u_img->baseName . '.' .
-                    $model->u_img->extension;
-            }
+            if ($model->u_torrent !== null) {
+                $nombre = $model->u_torrent->baseName . '.' .
+                          $model->u_torrent->extension;
+                $model->size = $model->u_torrent->size;
+                $model->md5 = md5_file($model->u_torrent->tempName);
+                $model->file = $model->md5 . '-' . $nombre;
 
-            if (
-                $model->uploadImg() &&
-                $model->uploadTorrent() &&
-                $model->save())
-            {
-                return $this->redirect(['view', 'id' => $model->id]);
+                // Guardo imagen si existe
+                if ($model->u_img !== null) {
+                    $model->imagen = $model->md5 . '-' .
+                        $model->u_img->baseName . '.' .
+                        $model->u_img->extension;
+                }
+
+                // Guardo modelo y subo archivos
+                if ($model->save() &&
+                    $model->uploadTorrent() &&
+                    $model->uploadImg())
+                {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
 

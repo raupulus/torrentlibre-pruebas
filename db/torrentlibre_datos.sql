@@ -191,7 +191,7 @@ INSERT INTO categorias (nombre) VALUES
 --                   TORRENTS                    --
 ---------------------------------------------------
 INSERT INTO torrents (licencia_id, categoria_id, usuario_id, titulo, resumen,
-                      descripcion, imagen, file, size, magnet)
+                      descripcion, imagen, file, size, md5, magnet)
 VALUES
   (
       1
@@ -203,6 +203,7 @@ VALUES
     , 'torrent1.jpg'
     , 'torrent1.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f0'
     , 'magnet:xxxxxxxxxxxxxxx'
   )
 
@@ -216,6 +217,7 @@ VALUES
     , 'torrent2.jpg'
     , 'torrent2.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f1'
     , 'magnet:xxxxxxxxxxxxxxy'
   )
 
@@ -229,6 +231,7 @@ VALUES
     , 'torrent3.jpg'
     , 'torrent3.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f2'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 
@@ -242,6 +245,7 @@ VALUES
     , 'torrent4.jpg'
     , 'torrent4.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f3'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 
@@ -255,6 +259,7 @@ VALUES
     , 'torrent5.jpg'
     , 'torrent5.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f4'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 
@@ -268,6 +273,7 @@ VALUES
     , 'torrent6.jpg'
     , 'torrent6.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f5'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 
@@ -281,6 +287,7 @@ VALUES
     , 'torrent7.jpg'
     , 'torrent7.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f6'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 
@@ -294,6 +301,7 @@ VALUES
     , 'torrent8.jpg'
     , 'torrent8.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f7'
     , 'magnet:xxxxxxxxxxxxxxz'
 )
 
@@ -307,6 +315,7 @@ VALUES
     , 'torrent9.jpg'
     , 'torrent9.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f8'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 
@@ -320,6 +329,7 @@ VALUES
     , 'torrent10.jpg'
     , 'torrent10.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c569f9'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 
@@ -333,6 +343,7 @@ VALUES
     , 'torrent11.jpg'
     , 'torrent11.torrent'
     , 1024
+    , '1da569f68f3b3c472caafec432c56910'
     , 'magnet:xxxxxxxxxxxxxxz'
   )
 ;

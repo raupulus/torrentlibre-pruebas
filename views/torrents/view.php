@@ -9,8 +9,6 @@ use yii\widgets\DetailView;
 $this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-
-var_dump($model);
 ?>
 <div class="torrents-view">
 
@@ -19,7 +17,6 @@ var_dump($model);
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            //'id',
             'titulo',
             [
                 'attribute' => 'imagen',
@@ -36,8 +33,8 @@ var_dump($model);
                 }
             ],
             'resumen',
-            'licencia.tipo',
-            'categoria.nombre',
+            'licencia.tipo:text:Licencia',
+            'categoria.nombre:text:Categoría',
             'usuario.nick:text:Uploader',
             'descripcion',
             [
