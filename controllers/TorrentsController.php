@@ -150,8 +150,23 @@ class TorrentsController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $q_licencias = Licencias::find();
+        $q_categorias = Categorias::find();
+
+        $licencias = array_combine(
+            $q_licencias->select('id')->column(),
+            $q_licencias->select('tipo')->column()
+        );
+
+        $categorias = array_combine(
+            $q_categorias->select('id')->column(),
+            $q_categorias->select('nombre')->column()
+        );
+
         return $this->render('update', [
             'model' => $model,
+            'licencias' => $licencias,
+            'categorias' => $categorias,
         ]);
     }
 

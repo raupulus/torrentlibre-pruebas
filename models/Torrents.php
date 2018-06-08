@@ -4,6 +4,7 @@ namespace app\models;
 
 use function md5_file;
 use Yii;
+use yii\db\Expression;
 use yii\imagine\Image;
 
 /**
@@ -52,6 +53,16 @@ class Torrents extends \yii\db\ActiveRecord
     public $u_torrent;
 
     /**
+     * @const ESCENARIO_CREATE Constante para cuando estamos insertando
+     */
+    const ESCENARIO_CREATE = 'create';
+
+    /**
+     * @const ESCENARIO_UPDATE Constante para cuando estamos actualizando
+     */
+    const ESCENARIO_UPDATE = 'update';
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -77,6 +88,7 @@ class Torrents extends \yii\db\ActiveRecord
             [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
             [['u_img'], 'file', 'extensions' => 'png, jpg'],
             [['u_torrent'], 'file', 'extensions' => 'torrent'],
+            [['u_torrent'], 'required', 'on' => self::ESCENARIO_CREATE],
         ];
     }
 
@@ -118,6 +130,42 @@ class Torrents extends \yii\db\ActiveRecord
             'u_img' => 'Imagen Portada',
             'u_torrent' => 'Archivo Torrent',
         ];
+    }
+
+    /**
+     * Sobreescribe el método personalizando la configuración
+     * @return array Devuelve la configuración
+     */
+    public function behaviors()
+    {
+        return [
+            // Creo un timestamp cada vez que salta el evento create
+            // o update asignando el timestamp actual
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
+            ]
+        ];
+    }
+
+    /**
+     * Acciones llevadas a cabo antes de insertar un usuario
+     * @param bool $insert Acción a realizar, si existe está insertando
+     * @return bool Devuelve un booleano, si se lleva a cabo es true.
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                if ($this->scenario === self::ESCENARIO_UPDATE) {
+
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
