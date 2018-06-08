@@ -87,10 +87,11 @@ class TorrentsController extends Controller
         ]);
 
         // En el caso de existir datos mediante POST los proceso
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post())) {
             $model->u_img = UploadedFile::getInstance($model, 'u_img');
             $model->u_torrent = UploadedFile::getInstance($model, 'u_torrent');
 
+            // Es obligatorio que haya un torrent para continuar
             if ($model->u_torrent !== null) {
                 $nombre = $model->u_torrent->baseName . '.' .
                           $model->u_torrent->extension;
@@ -98,7 +99,7 @@ class TorrentsController extends Controller
                 $model->md5 = md5_file($model->u_torrent->tempName);
                 $model->file = $model->md5 . '-' . $nombre;
 
-                // Guardo imagen si existe
+                // Guardo imagen si existiera
                 if ($model->u_img !== null) {
                     $model->imagen = $model->md5 . '-' .
                         $model->u_img->baseName . '.' .
@@ -184,14 +185,16 @@ class TorrentsController extends Controller
         throw new NotFoundHttpException('La página solicitada no existe.');
     }
 
-    public function actionAumentarDescargas($id)
+    public function actionAumentardescargas($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = $model::ESCENARIO_UPDATE;
         $model->n_descargas += 1;
 
         if (Yii::$app->request->isPost) {
             return $model->save();
         }
+
+        //var_dump($model->n_descargas); die();
+        return false;
     }
 }
