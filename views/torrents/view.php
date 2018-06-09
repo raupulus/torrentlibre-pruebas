@@ -2,6 +2,7 @@
 
 use app\assets\TorrentsViewAsset;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -10,6 +11,17 @@ use yii\widgets\DetailView;
 $this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+/* Aumentar descargas al pulsar descargar */
+$url = Url::to(['aumentardescargas']);
+$parametros = 'id=' . $model->id . '&&' . '_csrf=' .
+              Yii::$app->request->getCsrfToken();
+$scripts = <<<EOF
+eventoDescargas("$parametros", "$url");
+EOF;
+/* Fin de aumentar descargas */
+
+$this->registerJs($scripts);
 
 // Registro assets para esta vista
 TorrentsViewAsset::register($this);
@@ -55,7 +67,8 @@ TorrentsViewAsset::register($this);
                     return HTML::a('Descargar', $ruta . $file, [
                         'class' => 'btn btn-success btn-descargar',
                     ]);
-                }
+                },
+                'on' => "aumentarDescargas($parametros, $url)",
             ],
             'size:shortSize',
             'magnet',
@@ -70,12 +83,7 @@ TorrentsViewAsset::register($this);
 
     <p>
         <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('+1', ['aumentardescargas', 'id' => $model->id], [
-            'class' => 'btn btn-primary',
-            'data' => [
-                'method' => 'post',
-            ],
-        ]) ?>
+
         <?= Html::a('Eliminar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [

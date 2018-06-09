@@ -185,16 +185,27 @@ class TorrentsController extends Controller
         throw new NotFoundHttpException('La página solicitada no existe.');
     }
 
-    public function actionAumentardescargas($id)
+    public function actionAumentardescargas()
     {
-        $model = $this->findModel($id);
-        $model->n_descargas += 1;
-
-        if (Yii::$app->request->isPost) {
-            return $model->save();
+        echo 'ok';
+        /*
+        $model = $this->findModel(Yii::$app->request->post('id'));
+        if (Yii::$app->request->isAjax || Yii::$app->request->isPost) {
+            $model->n_descargas += 1;
+            $model->save();
+            echo $model->n_descargas;
+            return true;
         }
 
-        //var_dump($model->n_descargas); die();
-        return false;
+        */
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'search' => 'asd',
+            'code' => 100,
+        ];
+
+
+        //return false;
     }
 }
