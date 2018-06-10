@@ -13,12 +13,14 @@
 function aumentarDescargas(parametros, url) {
     var xmlhttp = new XMLHttpRequest();
 
+    /*
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             console.log('terminado');
-            return xmlhttp.responseText;
+            //return xmlhttp.responseText;
         }
     };
+    */
 
     xmlhttp.open("POST", url, true);
 
@@ -27,9 +29,36 @@ function aumentarDescargas(parametros, url) {
     xmlhttp.send(parametros);
 }
 
-function actualizarDescargas(n_descargas) {
-    console.log(n_descargas);
-    alert(n_descargas);
+function actualizarDescargas(parametros, url) {
+    $.ajax({
+        dataType: 'json',
+        type: 'GET',
+        url: url,
+        //data:{'param1':'valor','param2':'valor2'},
+        //data: $('#formulario').serialize(),
+        timeout: 5000  // Tiempo a esperar antes de dar error
+    })
+     .done(function(datos) {
+        console.log('bien');
+    });
+    /*
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+            return JSON.parse(xmlhttp.responseText);
+            //document.getElementById('disponibilidad').append(resp);
+        }
+    };
+
+    xmlhttp.open("GET", url, true);
+
+    xmlhttp.send();
+    */
+
+    // Añade valor al campo correspondiente
+    //document.getElementById('???').
+
 }
 
 /**
@@ -40,10 +69,8 @@ function actualizarDescargas(n_descargas) {
 function eventoDescargas(parametros, url) {
     var btns = document.getElementsByClassName('btn-descargar')[0];
     btns.addEventListener('click', function() {
-        var n_descargas = aumentarDescargas(parametros, url);
-        console.log('eventoDescargas: ' + n_descargas);
-        if (n_descargas >= 1) {
-            actualizarDescargas(n_descargas);
-        }
+        aumentarDescargas(parametros, url);
+
+        console.log('eventoDescargas: ' + actualizarDescargas(parametros, url));
     });
 }

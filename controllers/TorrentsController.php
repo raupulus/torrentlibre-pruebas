@@ -187,25 +187,19 @@ class TorrentsController extends Controller
 
     public function actionAumentardescargas()
     {
-        echo 'ok';
-        /*
         $model = $this->findModel(Yii::$app->request->post('id'));
         if (Yii::$app->request->isAjax || Yii::$app->request->isPost) {
             $model->n_descargas += 1;
             $model->save();
-            echo $model->n_descargas;
-            return true;
         }
 
-        */
-
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return [
-            'search' => 'asd',
-            'code' => 100,
-        ];
-
-
         //return false;
+    }
+
+    public function actionRefrescardescargas() {
+        header('Content-type: application/json');
+        $x = ['x' => 20];
+
+        echo json_encode($x);
     }
 }
