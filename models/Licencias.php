@@ -44,7 +44,7 @@ class Licencias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'tipo' => 'Tipo',
+            'tipo' => 'Licencia',
             'url' => 'Url',
             'imagen' => 'Imagen',
         ];
@@ -56,5 +56,19 @@ class Licencias extends \yii\db\ActiveRecord
     public function getTorrents()
     {
         return $this->hasMany(Torrents::className(), ['licencia_id' => 'id']);
+    }
+
+    /**
+     * Devuelve un Array con todas las licencias en pareja de clave/valor
+     * siendo la clave el "id" y el valor su "tipo".
+     * @return array Todas las licencias en parejas de clave/valor.
+     */
+    public static function getAll()
+    {
+        $query = Licencias::find();
+        return array_combine(
+            $query->select('id')->column(),
+            $query->select('tipo')->column()
+        );
     }
 }

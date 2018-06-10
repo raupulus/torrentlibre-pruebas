@@ -1,13 +1,26 @@
 <?php
 
+/**
+ * @author Raúl Caro Pastorino
+ * @link http://www.fryntiz.es
+ * @copyright Copyright (c) 2018 Raúl Caro Pastorino
+ * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
+**/
+
 namespace app\controllers;
 
+use app\models\Categorias;
+use app\models\Licencias;
+use function array_combine;
+use function var_dump;
 use Yii;
 use app\models\Torrents;
 use app\models\TorrentsSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * TorrentsController implements the CRUD actions for Torrents model.
@@ -24,6 +37,17 @@ class TorrentsController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'delete', 'update'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -64,14 +88,52 @@ class TorrentsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Torrents();
+        $model = new Torrents([
+            'usuario_id' => Yii::$app->user->identity->id,
+            'n_descargas' => 0,
+        ]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        // En el caso de existir datos mediante POST los proceso
+        if ($model->load(Yii::$app->request->post())) {
+            $model->u_img = UploadedFile::getInstance($model, 'u_img');
+            $model->u_torrent = UploadedFile::getInstance($model, 'u_torrent');
+
+            // Es obligatorio que haya un torrent para continuar
+            if ($model->u_torrent !== null) {
+                $nombre = $model->u_torrent->baseName . '.' .
+                          $model->u_torrent->extension;
+                $model->size = $model->u_torrent->size;
+                $model->md5 = md5_file($model->u_torrent->tempName);
+                $model->file = $model->md5 . '-' . $nombre;
+
+                // Guardo imagen si existiera
+                if ($model->u_img !== null) {
+                    $model->imagen = $model->md5 . '-' .
+                        $model->u_img->baseName . '.' .
+                        $model->u_img->extension;
+                }
+
+                // Guardo modelo y subo archivos
+                if ($model->save() &&
+                    $model->uploadTorrent() &&
+                    $model->uploadImg())
+                {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'Es obligatorio el archivo torrent');
+                $model->addError('u_torrent',
+                    'Es obligatorio agregar un Torrent válido');
+            }
         }
+
+        $licencias = Licencias::getAll();
+        $categorias = Categorias::getAll();
 
         return $this->render('create', [
             'model' => $model,
+            'licencias' => $licencias,
+            'categorias' => $categorias,
         ]);
     }
 
@@ -90,8 +152,13 @@ class TorrentsController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $licencias = Licencias::getAll();
+        $categorias = Categorias::getAll();
+
         return $this->render('update', [
             'model' => $model,
+            'licencias' => $licencias,
+            'categorias' => $categorias,
         ]);
     }
 
@@ -122,6 +189,17 @@ class TorrentsController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La página solicitada no existe.');
+    }
+
+    public function actionAumentardescargas()
+    {
+        $model = $this->findModel(Yii::$app->request->post('id'));
+        if (Yii::$app->request->isAjax || Yii::$app->request->isPost) {
+            $model->n_descargas += 1;
+            $model->save();
+        }
+
+        echo $model->n_descargas;
     }
 }

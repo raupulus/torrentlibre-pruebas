@@ -11,6 +11,7 @@ namespace app\models;
 
 use function var_dump;
 use Yii;
+use yii\db\Expression;
 use yii\web\IdentityInterface;
 use yii\helpers\Url;
 use yii\imagine\Image;
@@ -84,14 +85,6 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return 'usuarios';
     }
 
-    public function attributes()
-    {
-        return array_merge(parent::attributes(), [
-            'password_repeat',
-            'imagen',
-        ]);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -130,6 +123,18 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     /**
      * {@inheritdoc}
+     * @return array
+     */
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+            'password_repeat',
+            'imagen',
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -158,6 +163,23 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ];
     }
 
+    /**
+     * Sobreescribe el método personalizando la configuración
+     * @return array Devuelve la configuración
+     */
+    public function behaviors()
+    {
+        return [
+            // Creo un timestamp cada vez que salta el evento create
+            // o update asignando el timestamp actual
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
+            ]
+        ];
+    }
 
     /**
      * @return \yii\db\ActiveQuery

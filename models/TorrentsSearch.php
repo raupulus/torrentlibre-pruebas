@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author Raúl Caro Pastorino
+ * @link http://www.fryntiz.es
+ * @copyright Copyright (c) 2018 Raúl Caro Pastorino
+ * @license https://www.gnu.org/licenses/gpl-3.0-standalone.html
+**/
 
 namespace app\models;
 
@@ -48,6 +54,7 @@ class TorrentsSearch extends Torrents
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => ['pageSize' => Yii::getAlias('@p_torrents')],
         ]);
 
         $this->load($params);
@@ -58,13 +65,13 @@ class TorrentsSearch extends Torrents
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        // Condiciones de filtrado en el Grid
         $query->andFilterWhere([
-            'id' => $this->id,
+            //'id' => $this->id,
             'licencia_id' => $this->licencia_id,
             'categoria_id' => $this->categoria_id,
             'usuario_id' => $this->usuario_id,
-            'size' => $this->size,
+            //'size' => $this->size,
             'n_descargas' => $this->n_descargas,
             'online' => $this->online,
             'created_at' => $this->created_at,
@@ -74,11 +81,7 @@ class TorrentsSearch extends Torrents
         $query->andFilterWhere(['ilike', 'titulo', $this->titulo])
             ->andFilterWhere(['ilike', 'resumen', $this->resumen])
             ->andFilterWhere(['ilike', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['ilike', 'imagen', $this->imagen])
-            ->andFilterWhere(['ilike', 'file', $this->file])
-            ->andFilterWhere(['ilike', 'magnet', $this->magnet])
-            ->andFilterWhere(['ilike', 'password', $this->password])
-            ->andFilterWhere(['ilike', 'md5', $this->md5]);
+            ;
 
         return $dataProvider;
     }
