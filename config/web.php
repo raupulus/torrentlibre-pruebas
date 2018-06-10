@@ -5,8 +5,8 @@ $db = require __DIR__ . '/db.php';
 $log = require __DIR__ . '/log.php';
 
 // Consigo aquí la URL del dominio raíz
-$webroot = dirname(__DIR__) . '/www';
-$url = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+//$webroot = dirname(__DIR__) . '/www';
+//$url = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 
 $config = [
     'id' => 'basic',
@@ -15,9 +15,9 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
-        '@r_avatar' => $url.$params['rutaAvatar'],
-        '@r_imgTorrent' => $url.$params['rutaImagenTorrent'],
-        '@r_torrents' => $url.$params['rutaTorrent'],
+        '@r_avatar' => $params['rutaAvatar'],
+        '@r_imgTorrent' => $params['rutaImagenTorrent'],
+        '@r_torrents' => $params['rutaTorrent'],
         '@p_torrents' => $params['paginacion_torrents'],
         '@tmp' => '@app/'.$params['tmp'],
     ],
@@ -62,14 +62,12 @@ $config = [
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

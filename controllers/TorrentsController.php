@@ -193,13 +193,6 @@ class TorrentsController extends Controller
             $model->save();
         }
 
-        //return false;
-    }
-
-    public function actionRefrescardescargas() {
-        header('Content-type: application/json');
-        $x = ['x' => 20];
-
-        echo json_encode($x);
+        echo $model->n_descargas;
     }
 }

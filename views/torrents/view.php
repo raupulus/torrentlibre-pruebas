@@ -13,11 +13,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Torrents', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 /* Aumentar descargas al pulsar descargar */
-$url = Url::to(['aumentardescargas']);
-$parametros = 'id=' . $model->id . '&&' . '_csrf=' .
-              Yii::$app->request->getCsrfToken();
 $scripts = <<<EOF
-eventoDescargas("$parametros", "$url");
+eventoDescargas();
 EOF;
 /* Fin de aumentar descargas */
 
@@ -39,7 +36,7 @@ TorrentsViewAsset::register($this);
                 'format' => 'raw',
                 'value' => function($model) {
                     $img = $model->imagen;
-                    $ruta = yii::getAlias('@r_imgTorrent').'/';
+                    $ruta = Yii::$app->request->baseUrl . yii::getAlias('@r_imgTorrent').'/';
 
                     if ((! isset($img)) || (! file_exists($ruta.$img))) {
                         $img = 'default.png';
@@ -60,21 +57,29 @@ TorrentsViewAsset::register($this);
                     $file = $model->file;
                     $ruta = yii::getAlias('@r_torrents').'/';
 
+                    /* No funciona desde que active prettyURL pero la ruta ok
                     if ((! isset($file)) || (! file_exists($ruta.$file))) {
                         return 'Archivo torrent no encontrado';
                     }
+                    */
 
-                    return HTML::a('Descargar', $ruta . $file, [
-                        'class' => 'btn btn-success btn-descargar',
-                    ]);
+                    return Html::beginForm('', 'post', [
+                            'name' => 'aumentar-descargas']) .
+                        Html::hiddenInput('id', $model->id) .
+                        Html::hiddenInput('file', $ruta . $file) .
+                        Html::submitButton('Descargar Torrent', [
+                                'class' => 'btn btn-success btn-descargar']) .
+                        Html::endForm();
                 },
-                'on' => "aumentarDescargas($parametros, $url)",
             ],
             'size:shortSize',
             'magnet',
             'password',
             'md5',
-            'n_descargas',
+            [
+                'attribute' => 'n_descargas',
+                'contentOptions' => ['class' => 'n_descargas'],
+            ],
             'online:boolean',
             'created_at:datetime',
             'updated_at:datetime',
